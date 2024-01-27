@@ -1,11 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
-import { Inter } from "next/font/google";
-import styles from "@/styles/Home.module.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 
-const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
     return (
@@ -17,7 +12,7 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <div>
-                <Image src="/home-page.jpg" alt="" width={1500} height={40} />
+                <Image src="/home-page.jpg" alt="" width={1500} height={40} className="w-full" />
                 <div>
                     <section className="text-gray-600 body-font p-4">
                         <div className="container px-5 py-24 mx-auto">

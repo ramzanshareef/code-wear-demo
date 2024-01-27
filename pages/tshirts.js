@@ -6,10 +6,10 @@ const tshirts = () => {
         <div className="p-4">
             <section className="text-gray-600 body-font">
                 <div className="container px-5 py-24 w-fit mx-auto">
-                    <div className="flex flex-wrap -m-4 justify-center">
+                    <div className="flex flex-wrap -m-4 justify-center p-6">
                         <Link href="/product/t-shirt" className="lg:w-1/5 md:w-1/2 p-4 w-full shadow-md rounded-lg m-1">
                                 <div className="block relative h-48 rounded overflow-hidden">
-                                    <img alt="ecommerce" className="h-[39vh] mx-auto " src="https://m.media-amazon.com/images/I/51byp5tQ86L._SX679_.jpg" />
+                                    <img alt="ecommerce" className="h-60 w-72 md:w-60 mx-auto " src="https://m.media-amazon.com/images/I/51byp5tQ86L._SX679_.jpg" />
                                 </div>
                                 <div className="mt-4 text-center md:text-left">
                                     <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">T Shirts</h3>
@@ -20,7 +20,7 @@ const tshirts = () => {
                         </Link>
                         <Link href="/product/t-shirt" className="lg:w-1/5 md:w-1/2 p-4 w-full shadow-md rounded-lg m-1">
                                 <div className="block relative h-48 rounded overflow-hidden">
-                                    <img alt="ecommerce" className="h-[39vh] mx-auto " src="https://m.media-amazon.com/images/I/51byp5tQ86L._SX679_.jpg" />
+                                    <img alt="ecommerce" className="h-60 w-72 md:w-60 mx-auto " src="https://m.media-amazon.com/images/I/51byp5tQ86L._SX679_.jpg" />
                                 </div>
                                 <div className="mt-4 text-center md:text-left">
                                     <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">T Shirts</h3>
@@ -31,7 +31,7 @@ const tshirts = () => {
                         </Link>
                         <Link href="/product/t-shirt" className="lg:w-1/5 md:w-1/2 p-4 w-full shadow-md rounded-lg m-1">
                                 <div className="block relative h-48 rounded overflow-hidden">
-                                    <img alt="ecommerce" className="h-[39vh] mx-auto " src="https://m.media-amazon.com/images/I/51byp5tQ86L._SX679_.jpg" />
+                                    <img alt="ecommerce" className="h-60 w-72 md:w-60 mx-auto " src="https://m.media-amazon.com/images/I/51byp5tQ86L._SX679_.jpg" />
                                 </div>
                                 <div className="mt-4 text-center md:text-left">
                                     <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">T Shirts</h3>
@@ -42,7 +42,7 @@ const tshirts = () => {
                         </Link>
                         <Link href="/product/t-shirt" className="lg:w-1/5 md:w-1/2 p-4 w-full shadow-md rounded-lg m-1">
                                 <div className="block relative h-48 rounded overflow-hidden">
-                                    <img alt="ecommerce" className="h-[39vh] mx-auto " src="https://m.media-amazon.com/images/I/51byp5tQ86L._SX679_.jpg" />
+                                    <img alt="ecommerce" className="h-60 w-72 md:w-60 mx-auto " src="https://m.media-amazon.com/images/I/51byp5tQ86L._SX679_.jpg" />
                                 </div>
                                 <div className="mt-4 text-center md:text-left">
                                     <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">T Shirts</h3>
@@ -53,7 +53,7 @@ const tshirts = () => {
                         </Link>
                         <Link href="/product/t-shirt" className="lg:w-1/5 md:w-1/2 p-4 w-full shadow-md rounded-lg m-1">
                                 <div className="block relative h-48 rounded overflow-hidden">
-                                    <img alt="ecommerce" className="h-[39vh] mx-auto " src="https://m.media-amazon.com/images/I/51byp5tQ86L._SX679_.jpg" />
+                                    <img alt="ecommerce" className="h-60 w-72 md:w-60 mx-auto " src="https://m.media-amazon.com/images/I/51byp5tQ86L._SX679_.jpg" />
                                 </div>
                                 <div className="mt-4 text-center md:text-left">
                                     <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">T Shirts</h3>
@@ -64,7 +64,7 @@ const tshirts = () => {
                         </Link>
                         <Link href="/product/t-shirt" className="lg:w-1/5 md:w-1/2 p-4 w-full shadow-md rounded-lg m-1">
                                 <div className="block relative h-48 rounded overflow-hidden">
-                                    <img alt="ecommerce" className="h-[39vh] mx-auto " src="https://m.media-amazon.com/images/I/51byp5tQ86L._SX679_.jpg" />
+                                    <img alt="ecommerce" className="h-60 w-72 md:w-60 mx-auto " src="https://m.media-amazon.com/images/I/51byp5tQ86L._SX679_.jpg" />
                                 </div>
                                 <div className="mt-4 text-center md:text-left">
                                     <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">T Shirts</h3>
@@ -75,7 +75,7 @@ const tshirts = () => {
                         </Link>
                         <Link href="/product/t-shirt" className="lg:w-1/5 md:w-1/2 p-4 w-full shadow-md rounded-lg m-1">
                                 <div className="block relative h-48 rounded overflow-hidden">
-                                    <img alt="ecommerce" className="h-[39vh] mx-auto " src="https://m.media-amazon.com/images/I/51byp5tQ86L._SX679_.jpg" />
+                                    <img alt="ecommerce" className="h-60 w-72 md:w-60 mx-auto " src="https://m.media-amazon.com/images/I/51byp5tQ86L._SX679_.jpg" />
                                 </div>
                                 <div className="mt-4 text-center md:text-left">
                                     <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">T Shirts</h3>
@@ -86,7 +86,7 @@ const tshirts = () => {
                         </Link>
                         <Link href="/product/t-shirt" className="lg:w-1/5 md:w-1/2 p-4 w-full shadow-md rounded-lg m-1">
                                 <div className="block relative h-48 rounded overflow-hidden">
-                                    <img alt="ecommerce" className="h-[39vh] mx-auto " src="https://m.media-amazon.com/images/I/51byp5tQ86L._SX679_.jpg" />
+                                    <img alt="ecommerce" className="h-60 w-72 md:w-60 mx-auto " src="https://m.media-amazon.com/images/I/51byp5tQ86L._SX679_.jpg" />
                                 </div>
                                 <div className="mt-4 text-center md:text-left">
                                     <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">T Shirts</h3>
