@@ -19,7 +19,7 @@ const signup = () => {
 					<form className="space-y-6" action="#" method="POST">
 						<div>
 							<label
-								for="name"
+								htmlFor="name"
 								className="block text-sm font-medium leading-6 text-gray-900"
 							>
 								Name
@@ -29,7 +29,7 @@ const signup = () => {
 									id="name"
 									name="name"
 									type="text"
-									autocomplete="name"
+									autoComplete="name"
 									required
 									className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 p-2"
 								/>
@@ -37,7 +37,7 @@ const signup = () => {
 						</div>
 						<div>
 							<label
-								for="email"
+								htmlFor="email"
 								className="block text-sm font-medium leading-6 text-gray-900"
 							>
 								Email address
@@ -47,7 +47,7 @@ const signup = () => {
 									id="email"
 									name="email"
 									type="email"
-									autocomplete="email"
+									autoComplete="email"
 									required
 									className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 p-2"
 								/>
@@ -55,7 +55,7 @@ const signup = () => {
 						</div>
 						<div>
 							<label
-								for="password"
+								htmlFor="password"
 								className="block text-sm font-medium leading-6 text-gray-900"
 							>
 								Password
@@ -65,7 +65,7 @@ const signup = () => {
 									id="password"
 									name="password"
 									type="password"
-									autocomplete="current-password"
+									autoComplete="current-password"
 									required
 									className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 p-2"
 								/>

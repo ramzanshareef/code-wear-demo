@@ -19,27 +19,27 @@ const checkout = (props) => {
                                 </div>
                                 <div className="flex flex-col space-y-2 md:space-y-0 md:flex-row md:space-x-2 my-2">
                                     <div className="w-full md:w-1/2">
-                                        <label for="name" className="leading-7 text-sm text-gray-600">Name</label>
+                                        <label htmlFor="name" className="leading-7 text-sm text-gray-600">Name</label>
                                         <input type="text" name="name" className="w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                                             required
                                         />
                                     </div>
                                     <div className="w-full md:w-1/2">
-                                        <label for="email" className="leading-7 text-sm text-gray-600">Email</label>
+                                        <label htmlFor="email" className="leading-7 text-sm text-gray-600">Email</label>
                                         <input type="email" name="email" className="w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                                             required
                                         />
                                     </div>
                                 </div>
                                 <div className="w-full">
-                                    <label for="address" className="leading-7 text-sm text-gray-600">Address</label>
+                                    <label htmlFor="address" className="leading-7 text-sm text-gray-600">Address</label>
                                     <textarea name="address" cols="30" rows="2"
                                         className="w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                                     ></textarea>
                                 </div>
                                 <div className="flex flex-col space-y-2 md:space-y-0 md:flex-row md:justify-between my-2">
                                     <div className="w-full md:w-1/5">
-                                        <label for="phoneno" className="leading-7 text-sm text-gray-600">Phone Number</label>
+                                        <label htmlFor="phoneno" className="leading-7 text-sm text-gray-600">Phone Number</label>
                                         <input type="number" name="phoneno" className="w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                                             required
                                             maxLength={10}
@@ -47,19 +47,19 @@ const checkout = (props) => {
                                         />
                                     </div>
                                     <div className="w-full md:w-1/5">
-                                        <label for="city" className="leading-7 text-sm text-gray-600">City</label>
+                                        <label htmlFor="city" className="leading-7 text-sm text-gray-600">City</label>
                                         <input type="text" name="city" className="w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                                             required
                                         />
                                     </div>
                                     <div className="w-full md:w-1/5">
-                                        <label for="city" className="leading-7 text-sm text-gray-600">State</label>
+                                        <label htmlFor="city" className="leading-7 text-sm text-gray-600">State</label>
                                         <input type="text" name="city" className="w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                                             required
                                         />
                                     </div>
                                     <div className="w-full md:w-1/5">
-                                        <label for="pincode" className="leading-7 text-sm text-gray-600">Pin Code</label>
+                                        <label htmlFor="pincode" className="leading-7 text-sm text-gray-600">Pin Code</label>
                                         <input type="number" name="pincode" className="w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                                             required
                                         />
