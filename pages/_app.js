@@ -13,6 +13,7 @@ export default function App({ Component, pageProps }) {
             try{
                 if (localStorage.getItem("cart")) {
                     setCart(JSON.parse(localStorage.getItem("cart")));
+                    setSubTotal(JSON.parse(localStorage.getItem("subTotal")));
                 }
             } catch (e) {
                 saveCart({});

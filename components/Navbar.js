@@ -7,7 +7,6 @@ import { FiMinusCircle, FiPlusCircle } from "react-icons/fi";
 
 
 const Navbar = (props) => {
-    // console.log(props)
     const cartRef = useRef();
     const toggleCartView = () => {
         if (cartRef.current.classList.contains("translate-x-full")) {
@@ -40,7 +39,7 @@ const Navbar = (props) => {
                     <IoCartOutline className="text-3xl" />
                 </div>
             </div>
-            <div ref={cartRef} className="h-full z-20 w-72 cart-sidebar absolute top-0 right-0 bg-blue-200 p-8 transform transition-transform translate-x-full">
+            <div ref={cartRef} className={`min-h-screen z-20 w-72 cart-sidebar absolute top-0 right-0 bg-blue-200 p-8 transform transition-transform ${(Object.keys(props.cart).length!==0)? "translate-x-0" : "translate-x-full"} `}>
                 <h2 className="text-2xl font-bold text-center">Cart Details</h2>
                 <p className="absolute top-4 right-2" onClick={toggleCartView}>
                     <IoMdCloseCircle className="text-lg cursor-pointer text-blue-500" />
@@ -49,7 +48,7 @@ const Navbar = (props) => {
                     {
                         Object.keys(props.cart).length === 0 && <p className="text-center">Cart is empty</p>
                     }
-                    { props.cart && Object.keys(props.cart).map((item, index) => {
+                    {props.cart && Object.keys(props.cart).map((item, index) => {
                         return (
                             <li className="p-3" key={index}>
                                 <div className="flex justify-between items-center">
@@ -58,41 +57,46 @@ const Navbar = (props) => {
                                             {props.cart[item].name}
                                         </div>
                                         <div className="flex items-center justify-center w-1/3 space-x-2">
-                                            <FiMinusCircle className="text-lg cursor-pointer" 
-                                            onClick={() => {
-                                                props.removeFromCart({
-                                                    itemCode: item,
-                                                    qty: 1,
-                                                })
-                                            }} />
+                                            <FiMinusCircle className="text-lg cursor-pointer"
+                                                onClick={() => {
+                                                    props.removeFromCart({
+                                                        itemCode: item,
+                                                        qty: 1,
+                                                    })
+                                                }} />
                                             <p className="text-md">{props.cart[item].qty}</p>
-                                            <FiPlusCircle className="text-lg cursor-pointer" 
-                                            onClick={() => {
-                                                props.addToCart({
-                                                    itemCode: item,
-                                                    qty: 1,
-                                                    price: props.cart[item].price,
-                                                    name: props.cart[item].name,
-                                                    size: props.cart[item].size,
-                                                    variant: props.cart[item].variant
-                                                })
-                                            }} />
+                                            <FiPlusCircle className="text-lg cursor-pointer"
+                                                onClick={() => {
+                                                    props.addToCart({
+                                                        itemCode: item,
+                                                        qty: 1,
+                                                        price: props.cart[item].price,
+                                                        name: props.cart[item].name,
+                                                        size: props.cart[item].size,
+                                                        variant: props.cart[item].variant
+                                                    })
+                                                }} />
                                         </div>
                                     </div>
                                 </div>
                             </li>
                         )
-                    } )}
+                    })}
                 </ol>
-                <div className="flex space-x-2 my-8 items-center justify-start">
-                    <button className="flex items-center space-x-2 text-white bg-blue-500 border-0 py-2 px-4 focus:outline-none hover:bg-blue-600 rounded">
-                        <IoCartOutline className="text-xl" />
-                        <p>
-                            Checkout
-                        </p>
-                    </button>
+                <p className="text-md font-semibold">
+                    Subtotal: {props.subTotal}
+                </p>
+                <div className="flex space-x-2 my-2 items-center justify-start">
+                    <Link href={"/checkout"}>
+                        <button className="flex items-center space-x-2 text-white bg-blue-500 border-0 py-2 px-4 focus:outline-none hover:bg-blue-600 rounded">
+                            <IoCartOutline className="text-xl" />
+                            <p>
+                                Checkout
+                            </p>
+                        </button>
+                    </Link>
                     <button className="flex items-center space-x-2 text-white bg-blue-500 border-0 py-2 px-4 focus:outline-none hover:bg-blue-600 rounded"
-                    onClick={props.clearCart}
+                        onClick={props.clearCart}
                     >
                         Clear
                     </button>
