@@ -6,7 +6,8 @@ import { IoMdCloseCircle } from "react-icons/io";
 import { FiMinusCircle, FiPlusCircle } from "react-icons/fi";
 
 
-const Navbar = () => {
+const Navbar = (props) => {
+    // console.log(props)
     const cartRef = useRef();
     const toggleCartView = () => {
         if (cartRef.current.classList.contains("translate-x-full")) {
@@ -21,10 +22,10 @@ const Navbar = () => {
 
     return (
         <>
-            <div className="flex flex-col md:flex-row justify-between items-center p-4 space-y-2 md:space-y-0 shadow-md ">
+            <div className="flex flex-col md:flex-row justify-between items-center p-4 space-y-2 md:space-y-0 shadow-md sticky top-0 z-10 bg-white">
                 <div className="logo">
                     <Link href={"/"}>
-                        <Image src="/vercel.svg" width={100} height={90} />
+                        <Image src="/vercel.svg" width={100} height={90} alt="home" />
                     </Link>
                 </div>
                 <div className="nav">
@@ -39,35 +40,60 @@ const Navbar = () => {
                     <IoCartOutline className="text-3xl" />
                 </div>
             </div>
-            <div ref={cartRef} className="h-full w-72 cart-sidebar z-50 absolute top-0 right-0 bg-blue-200 p-8 transform transition-transform translate-x-full">
+            <div ref={cartRef} className="h-full z-20 w-72 cart-sidebar absolute top-0 right-0 bg-blue-200 p-8 transform transition-transform translate-x-full">
                 <h2 className="text-2xl font-bold text-center">Cart Details</h2>
                 <p className="absolute top-4 right-2" onClick={toggleCartView}>
                     <IoMdCloseCircle className="text-lg cursor-pointer text-blue-500" />
                 </p>
                 <ol className="list-decimal my-2">
-                    <li className="p-3">
-                        <div className="flex justify-between items-center">
-                            <div className="w-full flex flex-row">
-                                <div className="w-2/3 ">
-                                    Blue T shirt
+                    {
+                        Object.keys(props.cart).length === 0 && <p className="text-center">Cart is empty</p>
+                    }
+                    { props.cart && Object.keys(props.cart).map((item, index) => {
+                        return (
+                            <li className="p-3" key={index}>
+                                <div className="flex justify-between items-center">
+                                    <div className="w-full flex flex-row">
+                                        <div className="w-2/3 ">
+                                            {props.cart[item].name}
+                                        </div>
+                                        <div className="flex items-center justify-center w-1/3 space-x-2">
+                                            <FiMinusCircle className="text-lg cursor-pointer" 
+                                            onClick={() => {
+                                                props.removeFromCart({
+                                                    itemCode: item,
+                                                    qty: 1,
+                                                })
+                                            }} />
+                                            <p className="text-md">{props.cart[item].qty}</p>
+                                            <FiPlusCircle className="text-lg cursor-pointer" 
+                                            onClick={() => {
+                                                props.addToCart({
+                                                    itemCode: item,
+                                                    qty: 1,
+                                                    price: props.cart[item].price,
+                                                    name: props.cart[item].name,
+                                                    size: props.cart[item].size,
+                                                    variant: props.cart[item].variant
+                                                })
+                                            }} />
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="flex items-center justify-center w-1/3 space-x-2">
-                                    <FiMinusCircle className="text-lg cursor-pointer" />
-                                    <p className="text-md">1</p>
-                                    <FiPlusCircle className="text-lg cursor-pointer" />
-                                </div>
-                            </div>
-                        </div>
-                    </li>
+                            </li>
+                        )
+                    } )}
                 </ol>
                 <div className="flex space-x-2 my-8 items-center justify-start">
-                    <button class="flex items-center space-x-2 text-white bg-blue-500 border-0 py-2 px-4 focus:outline-none hover:bg-blue-600 rounded">
+                    <button className="flex items-center space-x-2 text-white bg-blue-500 border-0 py-2 px-4 focus:outline-none hover:bg-blue-600 rounded">
                         <IoCartOutline className="text-xl" />
                         <p>
                             Checkout
                         </p>
                     </button>
-                    <button class="flex items-center space-x-2 text-white bg-blue-500 border-0 py-2 px-4 focus:outline-none hover:bg-blue-600 rounded">
+                    <button className="flex items-center space-x-2 text-white bg-blue-500 border-0 py-2 px-4 focus:outline-none hover:bg-blue-600 rounded"
+                    onClick={props.clearCart}
+                    >
                         Clear
                     </button>
                 </div>
