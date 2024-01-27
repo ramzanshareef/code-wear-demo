@@ -4,7 +4,7 @@ import React, { useRef } from 'react'
 import { IoCartOutline } from "react-icons/io5";
 import { IoMdCloseCircle } from "react-icons/io";
 import { FiMinusCircle, FiPlusCircle } from "react-icons/fi";
-
+import { MdAccountCircle } from "react-icons/md";
 
 const Navbar = (props) => {
     const cartRef = useRef();
@@ -35,11 +35,14 @@ const Navbar = (props) => {
                         <Link href={"/stickers"}><li>Stickers</li> </Link>
                     </ul>
                 </div>
-                <div className="cart cursor-pointer" onClick={toggleCartView}>
+                <div className="cart cursor-pointer flex flex-row" onClick={toggleCartView}>
+                    <Link href={"/login"} >
+                    <MdAccountCircle className="text-3xl" />
+                    </Link>
                     <IoCartOutline className="text-3xl" />
                 </div>
             </div>
-            <div ref={cartRef} className={`min-h-screen z-20 w-72 cart-sidebar absolute top-0 right-0 bg-blue-200 p-8 transform transition-transform ${(Object.keys(props.cart).length!==0)? "translate-x-0" : "translate-x-full"} `}>
+            <div ref={cartRef} className={`min-h-screen z-20 w-72 cart-sidebar absolute top-0 right-0 bg-blue-200 p-8 transform transition-transform ${(Object.keys(props.cart).length !== 0) ? "translate-x-0" : "translate-x-full"} `}>
                 <h2 className="text-2xl font-bold text-center">Cart Details</h2>
                 <p className="absolute top-4 right-2" onClick={toggleCartView}>
                     <IoMdCloseCircle className="text-lg cursor-pointer text-blue-500" />
