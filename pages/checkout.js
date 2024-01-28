@@ -81,7 +81,7 @@ const checkout = (props) => {
                                                     <div className="flex justify-between items-center">
                                                         <div className="w-full flex flex-row">
                                                             <div className="w-2/3 ">
-                                                                {props.cart[item].name}
+                                                                {props.cart[item].name + "(" + props.cart[item].size + "/" + props.cart[item].color + ")"}
                                                             </div>
                                                             <div className="flex items-center justify-center w-1/3 space-x-2">
                                                                 <IoRemoveCircleOutline className="text-lg cursor-pointer"

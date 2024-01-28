@@ -35,12 +35,12 @@ export default function App({ Component, pageProps }) {
         setSubTotal(subT);
         localStorage.setItem("subTotal", subT);
     }
-    const addToCart = ({ itemCode, qty, price, name, size, variant }) => {
+    const addToCart = ({ itemCode, qty, price, name, size, color }) => {
         let newCart = cart;
         if (itemCode in cart) {
             newCart[itemCode].qty += qty;
         } else {
-            newCart[itemCode] = { qty, price, name, size, variant };
+            newCart[itemCode] = { qty, price, name, size, color };
         }
         setCart(newCart);
         saveCart(newCart);
