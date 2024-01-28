@@ -3,14 +3,15 @@ import mongoose from "mongoose";
 import Link from "next/link";
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Slug = (props) => {
-    let colors = ["bg-red-500", "bg-blue-500", "bg-green-500", "bg-yellow-500", "bg-pink-500", "bg-purple-500", "bg-indigo-500", "bg-gray-500", "bg-black-500", "bg-white-500"];
+    let colors = ["bg-red-500", "bg-blue-500", "bg-green-500", "bg-yellow-500", "bg-pink-500", "bg-purple-500", "bg-indigo-500", "bg-gray-500", "bg-black-500", "bg-white-500", "bg-black"];
 
     const router = useRouter();
     const { slug } = router.query;
     const [pin, setPin] = useState("");
-    const [serviceAvailable, setServiceAvailable] = useState();
     const [color, setcolor] = useState(props.product.color);
     const [size, setsize] = useState(props.product.size);
 
@@ -26,16 +27,26 @@ const Slug = (props) => {
             const pincodes = await fetch("http://localhost:3000/api/pincode");
             const data = await pincodes.json();
             if (data.pincodes.includes(Number(pin)) === true) {
-                setServiceAvailable(true);
-                setTimeout(() => {
-                    setServiceAvailable()
-                }, 3000);
+                toast.success("Hurray! We deliver to this pin code.",{
+                    position: "top-center",
+                    autoClose: 1500,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
             }
             else {
-                setServiceAvailable(false);
-                setTimeout(() => {
-                    setServiceAvailable()
-                }, 3000);
+                toast.error("Sorry! We don't deliver to this pin code yet.",{
+                    position: "top-center",
+                    autoClose: 1500,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
             }
         }
 
@@ -48,7 +59,16 @@ const Slug = (props) => {
             name: props.product.title,
             size: props.product.size,
             color: props.product.color,
-        })
+        });
+        toast.success("Item added to cart successfully!",{
+            position: "top-center",
+            autoClose: 1500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
     }
     const buyNow = () => {
         props.buyNow({
@@ -110,6 +130,7 @@ const Slug = (props) => {
 
     return (
         <div>
+            <ToastContainer />
             <section className="text-gray-600 body-font overflow-hidden">
                 <div className="container px-5 py-10 mx-auto">
                     <div className="lg:w-4/5 mx-auto flex flex-wrap items-center justify-center text-sm md:text-base">
@@ -168,7 +189,7 @@ const Slug = (props) => {
                                     {
                                         props.variants.filter((item, index, self) => self.findIndex(v => v.color === item.color) === index).map((item, key) => (
                                             <button
-                                                className={`border-2 border-gray-300 ml-2 bg-${item.color.toLowerCase()}-500 rounded-full w-6 h-6 focus:outline-none ${color === item.color ? "ring-2 ring-offset-2 ring-gray-500" : ""
+                                                className={`border border-gray-300 ml-2 bg-${item.color.toLowerCase()}-500 bg-${(item.color.toLowerCase()==="black")?"black":""} rounded-full w-6 h-6 focus:outline-none ${color === item.color ? "ring-2 ring-offset-2 ring-black" : ""
                                                     }`}
                                                 key={key}
                                                 title={key.color}
@@ -240,19 +261,6 @@ const Slug = (props) => {
                                     Check Pin
                                 </button>
                             </div>
-                            <div>
-                                {
-                                    (serviceAvailable === false) ?
-                                        <p className="text-red-600 text-sm mt-1">
-                                            Sorry! We don't deliver to this pin code yet.
-                                        </p>
-                                        :
-                                        (serviceAvailable === true) &&
-                                        <p className="text-green-600 text-sm mt-1">
-                                            Hurray! We deliver to this pin code.
-                                        </p>
-                                }
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -262,12 +270,11 @@ const Slug = (props) => {
 }
 
 export async function getServerSideProps(context) {
-
     if (!mongoose.connections[0].readyState) {
         await mongoose.connect(process.env.MONGODB_URL || "mongodb://127.0.0.1:27017/ecommerce")
     }
     let product = await Product.findOne({ slug: context.query.slug });
-    let variants = await Product.find({ title: product.title });
+    let variants = await Product.find({ title: product.title, category: product.category });
     let colorSizeSlug = {};
     for (let item of variants) {
         if (Object.keys(colorSizeSlug).includes(item.color)) {

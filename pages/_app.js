@@ -10,7 +10,7 @@ export default function App({ Component, pageProps }) {
 
     useEffect(() => {
         if (!effectRan.current) {
-            try{
+            try {
                 if (localStorage.getItem("cart")) {
                     setCart(JSON.parse(localStorage.getItem("cart")));
                     setSubTotal(JSON.parse(localStorage.getItem("subTotal")));
@@ -62,19 +62,15 @@ export default function App({ Component, pageProps }) {
     }
     const buyNow = ({ itemCode, qty, price, name, size, color }) => {
         let newCart = {};
-        if (itemCode in cart) {
-            newCart[itemCode].qty += qty;
-        } else {
-            newCart[itemCode] = { qty, price, name, size, color };
-        }
+        newCart[itemCode] = { qty, price, name, size, color };
         setCart(newCart);
         saveCart(newCart);
     }
 
 
     return <>
-        <Navbar  cart={cart} addToCart={addToCart} buyNow={buyNow} removeFromCart={removeFromCart} clearCart={clearCart} subTotal={subTotal} />
-        <Component  cart={cart} addToCart={addToCart} buyNow={buyNow} removeFromCart={removeFromCart} clearCart={clearCart} subTotal={subTotal} {...pageProps} />
+        <Navbar cart={cart} addToCart={addToCart} buyNow={buyNow} removeFromCart={removeFromCart} clearCart={clearCart} subTotal={subTotal} />
+        <Component cart={cart} addToCart={addToCart} buyNow={buyNow} removeFromCart={removeFromCart} clearCart={clearCart} subTotal={subTotal} {...pageProps} />
         <Footer />
     </>
 }

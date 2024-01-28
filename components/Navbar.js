@@ -42,7 +42,7 @@ const Navbar = (props) => {
                     <IoCartOutline className="text-3xl" />
                 </div>
             </div>
-            <div ref={cartRef} className={`min-h-screen z-20 w-72 cart-sidebar absolute top-0 right-0 bg-blue-200 p-8 transform transition-transform ${(Object.keys(props.cart).length !== 0) ? "translate-x-0" : "translate-x-full"} `}>
+            <div ref={cartRef} className={`min-h-screen z-20 w-72 cart-sidebar absolute top-0 right-0 bg-blue-200 p-8 transform transition-transform overflow-y-scroll ${(Object.keys(props.cart).length !== 0) ? "translate-x-0" : "translate-x-full"} `}>
                 <h2 className="text-2xl font-bold text-center">Cart Details</h2>
                 <p className="absolute top-4 right-2" onClick={toggleCartView}>
                     <IoMdCloseCircle className="text-lg cursor-pointer text-blue-500" />
