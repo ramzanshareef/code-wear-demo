@@ -5,8 +5,10 @@ import { IoCartOutline } from "react-icons/io5";
 import { IoMdCloseCircle } from "react-icons/io";
 import { FiMinusCircle, FiPlusCircle } from "react-icons/fi";
 import { MdAccountCircle } from "react-icons/md";
+import { useRouter } from 'next/router';
 
 const Navbar = (props) => {
+    const router = useRouter();
     const cartRef = useRef();
     const toggleCartView = () => {
         if (cartRef.current.classList.contains("translate-x-full")) {
@@ -16,6 +18,16 @@ const Navbar = (props) => {
         else if (!cartRef.current.classList.contains("translate-x-full")) {
             cartRef.current.classList.add("translate-x-full")
             cartRef.current.classList.remove("translate-x-0")
+        }
+    }
+    const toggleAccountDropdown = () => {
+        if (document.querySelector(".account-dropdown").classList.contains("hidden")) {
+            document.querySelector(".account-dropdown").classList.remove("hidden")
+            document.querySelector(".account-dropdown").classList.add("block")
+        }
+        else if (!document.querySelector(".account-dropdown").classList.contains("hidden")) {
+            document.querySelector(".account-dropdown").classList.add("hidden")
+            document.querySelector(".account-dropdown").classList.remove("block")
         }
     }
 
@@ -35,11 +47,36 @@ const Navbar = (props) => {
                         <Link href={"/stickers"}><li className="hover:text-blue-400">Stickers</li> </Link>
                     </ul>
                 </div>
-                <div className="cart cursor-pointer flex flex-row" onClick={toggleCartView}>
-                    <Link href={"/login"} >
-                    <MdAccountCircle className="text-3xl" />
-                    </Link>
-                    <IoCartOutline className="text-3xl" />
+                <div className="cart cursor-pointer flex flex-row space-x-2 items-center justify-center" >
+                    {
+                        (props.user.token !== null) && <MdAccountCircle 
+                        onClick={toggleAccountDropdown}
+                        className="text-3xl" />
+                    }
+                    {
+                        (props.user.token === null) && <Link href={"/login"} >
+                            <p className="text-white bg-blue-400 hover:bg-blue-500 p-2 rounded-lg">Login</p>
+                        </Link>
+                    }
+
+                    <IoCartOutline onClick={toggleCartView} className="text-3xl" />
+                </div>
+            </div>
+            <div>
+                <div className="account-dropdown hidden absolute top-16 right-0 bg-blue-200 p-4 rounded-lg z-10">
+                    <ul className="flex flex-col space-y-2 justify-center items-center p-1">
+                        <Link href={"/profile"}><li className="hover:text-blue-400">Profile</li> </Link>
+                        <Link href={"/orders"}><li className="hover:text-blue-400">Orders</li> </Link>
+                        <li 
+                        onClick={()=>{
+                            toggleAccountDropdown();
+                            localStorage.removeItem("token");
+                            props.setUser({token:null});
+                            props.setKey(Math.random());
+                            router.push("/");
+                        }}
+                        className="hover:text-blue-400 cursor-pointer">Logout</li>
+                    </ul>
                 </div>
             </div>
             <div ref={cartRef} className={`min-h-screen z-20 w-72 cart-sidebar absolute top-0 right-0 bg-blue-200 p-8 transform transition-transform overflow-y-scroll ${(Object.keys(props.cart).length !== 0) ? "translate-x-0" : "translate-x-full"} `}>

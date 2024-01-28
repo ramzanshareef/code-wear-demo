@@ -1,9 +1,45 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const signup = () => {
+	const [name, setName] = useState("");
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		try {
+			const res = await fetch("http://localhost:3000/api/signup", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ name, email, password }),
+			});
+			const data = await res.json();
+			toast.success(data.message,{
+				position: "top-center",
+				autoClose: 1500,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
+			setName("");
+			setEmail("");
+			setPassword("");
+		} 
+		catch (err) {
+			console.log(err);
+		}
+	};
+
+
 	return (
 		<div>
+			<ToastContainer />
 			<div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
 				<div className="sm:mx-auto sm:w-full sm:max-w-sm">
 					<img
@@ -16,7 +52,7 @@ const signup = () => {
 					</h2>
 				</div>
 				<div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-					<form className="space-y-6" action="#" method="POST">
+					<form onSubmit={handleSubmit} className="space-y-6" method="POST">
 						<div>
 							<label
 								htmlFor="name"
@@ -30,7 +66,9 @@ const signup = () => {
 									name="name"
 									type="text"
 									autoComplete="name"
+									value={name}
 									required
+									onChange={(e) => setName(e.target.value)}
 									className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 p-2"
 								/>
 							</div>
@@ -48,7 +86,9 @@ const signup = () => {
 									name="email"
 									type="email"
 									autoComplete="email"
+									value={email}
 									required
+									onChange={(e) => setEmail(e.target.value)}
 									className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 p-2"
 								/>
 							</div>
@@ -65,8 +105,10 @@ const signup = () => {
 									id="password"
 									name="password"
 									type="password"
+									value={password}
 									autoComplete="current-password"
 									required
+									onChange={(e) => setPassword(e.target.value)}
 									className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 p-2"
 								/>
 							</div>
@@ -82,7 +124,7 @@ const signup = () => {
 					<p className="mt-10 text-center text-sm text-gray-500">
 						Already have an account? &nbsp;
 						<Link href={"/login"} className="font-semibold leading-6 text-blue-600 hover:text-blue-500" >
-							Sign in
+							Login
 						</Link>
 					</p>
 				</div>

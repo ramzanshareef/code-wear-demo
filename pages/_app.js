@@ -1,30 +1,33 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import "@/styles/globals.css";
+import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 
 export default function App({ Component, pageProps }) {
     const [cart, setCart] = useState({});
     const [subTotal, setSubTotal] = useState(0);
     const effectRan = useRef(false);
+    const [user, setUser] = useState({ token: null });
+    const [key, setKey] = useState(0);
+    const router = useRouter();
 
     useEffect(() => {
-        if (!effectRan.current) {
-            try {
-                if (localStorage.getItem("cart")) {
-                    setCart(JSON.parse(localStorage.getItem("cart")));
-                    setSubTotal(JSON.parse(localStorage.getItem("subTotal")));
-                }
-            } catch (e) {
-                saveCart({});
-                console.error(e.message);
+        try {
+            if (localStorage.getItem("cart")) {
+                setCart(JSON.parse(localStorage.getItem("cart")));
+                setSubTotal(JSON.parse(localStorage.getItem("subTotal")));
             }
-            effectRan.current = true;
+            let token = localStorage.getItem("token");
+            if (token) {
+                setUser({ token: token });
+                setKey(Math.random());
+            }
+        } catch (e) {
+            saveCart({});
+            console.error(e.message);
         }
-        else {
-            return;
-        }
-    }, []);
+    }, [router.query]);
 
     const saveCart = (myCart) => {
         localStorage.setItem("cart", JSON.stringify(myCart));
@@ -69,7 +72,7 @@ export default function App({ Component, pageProps }) {
 
 
     return <>
-        <Navbar cart={cart} addToCart={addToCart} buyNow={buyNow} removeFromCart={removeFromCart} clearCart={clearCart} subTotal={subTotal} />
+        <Navbar user={user} setUser={setUser} key={key} setKey={setKey} cart={cart} addToCart={addToCart} buyNow={buyNow} removeFromCart={removeFromCart} clearCart={clearCart} subTotal={subTotal} />
         <Component cart={cart} addToCart={addToCart} buyNow={buyNow} removeFromCart={removeFromCart} clearCart={clearCart} subTotal={subTotal} {...pageProps} />
         <Footer />
     </>
