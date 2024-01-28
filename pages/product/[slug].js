@@ -50,6 +50,17 @@ const Slug = (props) => {
             color: props.product.color,
         })
     }
+    const buyNow = () => {
+        props.buyNow({
+            itemCode: props.product._id,
+            qty: 1,
+            price: props.product.price,
+            name: props.product.title,
+            size: props.product.size,
+            color: props.product.color,
+        })
+        router.push("/checkout");
+    }
 
     useEffect(() => {
         if (localStorage.getItem("effectRan") === null || localStorage.getItem("effectRan") === "false") {
@@ -203,6 +214,9 @@ const Slug = (props) => {
                             </div>
                             <div className="flex">
                                 <span className="title-font font-medium text-2xl text-gray-900">₹‎{props.product.price}</span>
+                                <button className="flex ml-6 text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"
+                                    onClick={buyNow}
+                                >Buy Now</button>
                                 <button className="flex ml-6 text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"
                                     onClick={addToCart}
                                 >Add To Cart</button>

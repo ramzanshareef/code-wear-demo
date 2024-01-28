@@ -111,7 +111,7 @@ const checkout = (props) => {
                                         })}
                                     </ol>
                                     <span className="font-bold text-xl">
-                                        Subtotal : {props.subTotal}
+                                        Subtotal : ₹‎{props.subTotal}
                                     </span>
                                 </div>
                             </div>

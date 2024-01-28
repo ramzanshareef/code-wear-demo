@@ -29,10 +29,10 @@ const Navbar = (props) => {
                 </div>
                 <div className="nav">
                     <ul className="flex flex-col space-y-2 md:space-y-0 justify-center items-center md:flex-row md:space-x-6 p-2 md:items-center">
-                        <Link href={"/tshirts"}><li>T-shirts</li> </Link>
-                        <Link href={"/mugs"}><li>Mugs</li> </Link>
-                        <Link href={"/hoodies"}><li>Hoodies</li> </Link>
-                        <Link href={"/stickers"}><li>Stickers</li> </Link>
+                        <Link href={"/tshirts"}><li className="hover:text-blue-400">T-shirts</li> </Link>
+                        <Link href={"/mugs"}><li className="hover:text-blue-400">Mugs</li> </Link>
+                        <Link href={"/hoodies"}><li className="hover:text-blue-400">Hoodies</li> </Link>
+                        <Link href={"/stickers"}><li className="hover:text-blue-400">Stickers</li> </Link>
                     </ul>
                 </div>
                 <div className="cart cursor-pointer flex flex-row" onClick={toggleCartView}>
@@ -87,7 +87,7 @@ const Navbar = (props) => {
                     })}
                 </ol>
                 <p className="text-md font-semibold">
-                    Subtotal: {props.subTotal}
+                    Subtotal: ₹‎{props.subTotal}
                 </p>
                 <div className="flex space-x-2 my-2 items-center justify-start">
                     <Link href={"/checkout"}>

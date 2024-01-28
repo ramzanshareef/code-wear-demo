@@ -29,7 +29,7 @@ const tshirts = (props) => {
                                         <p className="mt-1">
                                             {
                                                 props.tshirts[product].size.sort().map((size, key) => (
-                                                    <span className={`inline-flex items-center justify-center px-2 py-1 mr-1 text-xs leading-none text-white bg-gray-500 rounded-3xl`} key={key}>{size}
+                                                    <span className="inline-flex items-center justify-center px-2 py-1 mr-1 text-xs leading-none border border-gray-400" key={key}>{size}
                                                     </span>
                                                 ))
                                             }
