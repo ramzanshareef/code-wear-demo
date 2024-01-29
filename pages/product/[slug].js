@@ -27,7 +27,7 @@ const Slug = (props) => {
             const pincodes = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/pincode`);
             const data = await pincodes.json();
             if (data.pincodes.includes(Number(pin)) === true) {
-                toast.success("Hurray! We deliver to this pin code.",{
+                toast.success("Hurray! We deliver to this pin code.", {
                     position: "top-center",
                     autoClose: 1500,
                     hideProgressBar: false,
@@ -38,7 +38,7 @@ const Slug = (props) => {
                 });
             }
             else {
-                toast.error("Sorry! We don't deliver to this pin code yet.",{
+                toast.error("Sorry! We don't deliver to this pin code yet.", {
                     position: "top-center",
                     autoClose: 1500,
                     hideProgressBar: false,
@@ -59,16 +59,19 @@ const Slug = (props) => {
             name: props.product.title,
             size: props.product.size,
             color: props.product.color,
+            category: props.product.category
         });
-        toast.success("Item added to cart successfully!",{
-            position: "top-center",
-            autoClose: 1500,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-        });
+        setTimeout(() => {
+            toast.success("Added to cart successfully", {
+                position: "top-center",
+                autoClose: 800,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }, 500);
     }
     const buyNow = () => {
         props.buyNow({
@@ -78,6 +81,7 @@ const Slug = (props) => {
             name: props.product.title,
             size: props.product.size,
             color: props.product.color,
+            category: props.product.category
         })
         router.push("/checkout");
     }
@@ -189,7 +193,7 @@ const Slug = (props) => {
                                     {
                                         props.variants.filter((item, index, self) => self.findIndex(v => v.color === item.color) === index).map((item, key) => (
                                             <button
-                                                className={`border border-gray-300 ml-2 bg-${item.color.toLowerCase()}-500 bg-${(item.color.toLowerCase()==="black")?"black":""} rounded-full w-6 h-6 focus:outline-none ${color === item.color ? "ring-2 ring-offset-2 ring-black" : ""
+                                                className={`border border-gray-300 ml-2 bg-${item.color.toLowerCase()}-500 bg-${(item.color.toLowerCase() === "black") ? "black" : ""} rounded-full w-6 h-6 focus:outline-none ${color === item.color ? "ring-2 ring-offset-2 ring-black" : ""
                                                     }`}
                                                 key={key}
                                                 title={key.color}

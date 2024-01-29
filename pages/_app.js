@@ -12,7 +12,7 @@ export default function App({ Component, pageProps }) {
     const [user, setUser] = useState({ token: null });
     const [key, setKey] = useState(0);
     const router = useRouter();
-    const [progress, setProgress] = useState(0)
+    const [progress, setProgress] = useState(0);
 
     useEffect(() => {
         try {
@@ -46,12 +46,12 @@ export default function App({ Component, pageProps }) {
         setSubTotal(subT);
         localStorage.setItem("subTotal", subT);
     }
-    const addToCart = ({ itemCode, qty, price, name, size, color }) => {
+    const addToCart = ({ itemCode, qty, price, name, size, color, category }) => {
         let newCart = cart;
         if (itemCode in cart) {
             newCart[itemCode].qty += qty;
         } else {
-            newCart[itemCode] = { qty, price, name, size, color };
+            newCart[itemCode] = { qty, price, name, size, color, category };
         }
         setCart(newCart);
         saveCart(newCart);
@@ -71,9 +71,9 @@ export default function App({ Component, pageProps }) {
         setCart({});
         saveCart({});
     }
-    const buyNow = ({ itemCode, qty, price, name, size, color }) => {
+    const buyNow = ({ itemCode, qty, price, name, size, color, category }) => {
         let newCart = {};
-        newCart[itemCode] = { qty, price, name, size, color };
+        newCart[itemCode] = { qty, price, name, size, color, category };
         setCart(newCart);
         saveCart(newCart);
     }

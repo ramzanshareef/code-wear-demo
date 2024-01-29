@@ -1,13 +1,33 @@
-import React from "react";
+import Order from "@/models/Order";
+import { useRouter } from "next/router";
+import React, { useEffect } from "react";
 
-const order = () => {
+const order = (props) => {
+    const router = useRouter();
+    useEffect(() => {
+        if (!localStorage.getItem("token")) {
+            router.push("/login");
+        }
+        else if (router.query.orderID == undefined) {
+            router.push("/");
+        }
+        else if (props.order === null) {
+            router.push("/");
+        }
+    }, [])
+    
+
+
+
     return (
         <div>
             <section className="text-gray-600 body-font overflow-hidden p-4">
                 <div className="container px-5 py-24 mx-auto">
                     <div className="lg:w-4/5 mx-auto flex flex-col md:flex-row flex-wrap-reverse space-y-4 md:space-y-0">
                         <div className="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
-                            <h2 className="text-sm title-font text-gray-500 tracking-widest">Code Wear</h2>
+                            <h2 className="text-sm title-font text-gray-500 tracking-widest">
+                                Order ID: {props.order && props.order.orderID}
+                            </h2>
                             <h1 className="text-gray-900 text-3xl title-font font-medium mb-4">
                                 Order placed successfully! 🎉
                             </h1>
@@ -21,25 +41,24 @@ const order = () => {
                                     <span className="font-semibold w-1/3 text-center">Item Total</span>
                                 </div>
                                 <div className="flex flex-col space-y-3">
-                                    <div className="flex flex-row border-b p-2">
-                                        <span className="w-1/3 text-center">T Shirt Alaka</span>
-                                        <span className="w-1/3 text-center">1</span>
-                                        <span className="w-1/3 text-center">₹40</span>
-                                    </div>
-                                    <div className="flex flex-row border-b p-2">
-                                        <span className="w-1/3 text-center">T Shirt Alaka</span>
-                                        <span className="w-1/3 text-center">1</span>
-                                        <span className="w-1/3 text-center">₹40</span>
-                                    </div>
-                                    <div className="flex flex-row border-b p-2">
-                                        <span className="w-1/3 text-center">T Shirt Alaka</span>
-                                        <span className="w-1/3 text-center">1</span>
-                                        <span className="w-1/3 text-center">₹40</span>
-                                    </div>
+                                    {
+                                        props.order && Object.keys(props.order.products).map((key) => {
+                                            return (
+                                                <div className="flex flex-row border-b p-2" key={key} >
+                                                    <span className="w-1/3 text-center">{props.order.products[key].name}</span>
+                                                    <span className="w-1/3 text-center">{props.order.products[key].qty}</span>
+                                                    <span className="w-1/3 text-center">₹{props.order.products[key].price*props.order.products[key].qty}</span>
+                                                </div>
+                                            )
+                                        })
+
+                                    }
                                 </div>
                             </div>
                             <div className="flex">
-                                <span className="title-font font-medium text-2xl text-gray-900">₹599</span>
+                                <span className="title-font font-medium text-2xl text-gray-900">
+                                   Amount Paid : ₹{props.order && props.order.amount}
+                                    </span>
                                 <button className="flex ml-auto text-white bg-blue-500 border-0 py-2 px-4 focus:outline-none hover:bg-blue-600 rounded">
                                     Track Order
                                 </button>
@@ -51,6 +70,16 @@ const order = () => {
             </section>
         </div>
     )
+}
+
+export async function getServerSideProps(context) {
+    const orderID = context.query.orderID;
+    const order = await Order.findOne({orderID: orderID});
+    return {
+        props: {
+            order: JSON.parse(JSON.stringify(order))
+        }
+    }
 }
 
 export default order

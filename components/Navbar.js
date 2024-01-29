@@ -120,7 +120,8 @@ const Navbar = (props) => {
                                                         price: props.cart[item].price,
                                                         name: props.cart[item].name,
                                                         size: props.cart[item].size,
-                                                        variant: props.cart[item].variant
+                                                        variant: props.cart[item].variant,
+                                                        category: props.cart[item].category
                                                     })
                                                 }} />
                                         </div>

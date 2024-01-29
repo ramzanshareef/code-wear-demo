@@ -5,6 +5,8 @@ import { BsFillBagCheckFill } from "react-icons/bs";
 import Head from "next/head";
 import Script from "next/script";
 import { useRouter } from "next/router";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const checkout = (props) => {
     const [name, setName] = useState("");
@@ -14,83 +16,168 @@ const checkout = (props) => {
     const [city, setCity] = useState("");
     const [state, setState] = useState("");
     const [pincode, setPincode] = useState("");
-    // const [paymentDisabled, setPaymentDisabled] = useState(true);
+    const [paymentDisabled, setPaymentDisabled] = useState(true);
+    const [paymentInfo, setPaymentInfo] = useState({});
     const router = useRouter();
 
     const initiatePayment = async (e) => {
         e.preventDefault();
-        const response = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/handlePayment`, {
+        const response1 = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/pretransaction`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
+                email: email,
+                address: address,
                 amount: props.subTotal,
+                products: props.cart
             }),
         });
-        if (response.status === 200) {
-            const data = await response.json();
-            var options = {
-                "key": process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-                "amount": data.order.amount,
-                "currency": "INR",
-                "name": "Code Wear",
-                "description": "Test Transaction",
-                "image": "https://scontent.fvga2-1.fna.fbcdn.net/v/t39.30808-6/333269272_729527645556981_8288775143650171103_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=efb6e6&_nc_ohc=OMfzubTugDAAX88YZIl&_nc_ht=scontent.fvga2-1.fna&oh=00_AfAbys8Jry1G7eNicpd5AkVK80Esu_daSF-zFOGssNIkbw&oe=65BC80FE",
-                "order_id": data.order.id,
-                "handler": function (response) {
-                    console.log("Payment Successful")
-                    console.log(response)
+        const orderData = await response1.json();
+        if (response1.status === 200) {
+            // const order = await response1.json();
+            const response2 = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/handlePayment`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
                 },
-                "prefill": {
-                    "name": "Gaurav Kumar",
-                    "email": "gaurav.kumar@example.com",
-                    "contact": "9000090000"
-                },
-                "notes": {
-                    "address": "Razorpay Corporate Office"
-                },
-                "theme": {
-                    "color": "#3399cc"
+                body: JSON.stringify({
+                    amount: orderData.order.amount,
+                }),
+            });
+            const paymentInitData = await response2.json();
+            if (response2.status === 200) {
+                // const paymentInitData = await response2.json();
+                var options = {
+                    "key": process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+                    "amount": paymentInitData.order.amount,
+                    "currency": "INR",
+                    "name": "Code Wear",
+                    "description": "Test Transaction",
+                    "image": "https://scontent.fvga2-1.fna.fbcdn.net/v/t39.30808-6/333269272_729527645556981_8288775143650171103_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=efb6e6&_nc_ohc=OMfzubTugDAAX88YZIl&_nc_ht=scontent.fvga2-1.fna&oh=00_AfAbys8Jry1G7eNicpd5AkVK80Esu_daSF-zFOGssNIkbw&oe=65BC80FE",
+                    "order_id": paymentInitData.order.id,
+                    "handler": async function (response) {
+                        console.log(orderData.order._id, paymentInitData.order.id, response.razorpay_payment_id, paymentInitData.order.amount)
+                        const response3 = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/postransaction`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                                id: orderData.order._id,
+                                orderID: paymentInitData.order.id,
+                                paymentID: response.razorpay_payment_id,
+                                amount: paymentInitData.order.amount,
+                            }),
+                        });
+                        const res3jsonData = await response3.json();
+                        if (response3.status === 200) {
+                            props.clearCart();
+                            setPaymentInfo(response);
+                            setName("");
+                            setEmail("");
+                            setAddress("");
+                            setPhoneno("");
+                            setCity("");
+                            setState("");
+                            setPincode("");
+                            setTimeout(() => {
+                                toast.success("Payment Successful! 🎉", {
+                                    position: "top-center",
+                                    autoClose: 900,
+                                    hideProgressBar: false,
+                                    closeOnClick: true,
+                                    pauseOnHover: true,
+                                    draggable: true,
+                                    progress: undefined,
+                                })
+                                router.push(`/order?orderID=${res3jsonData.order.orderID}`);
+                            }, 500);
+                        } else {
+                            toast.error(res3jsonData.error, {
+                                position: "top-center",
+                                autoClose: 900,
+                                hideProgressBar: false,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                progress: undefined,
+                            })
+                        }
+                    },
+                    "prefill": {
+                        "name": name,
+                        "email": email,
+                        "contact": phoneno
+                    },
+                    "notes": {
+                        "address": address,
+                        "city": city,
+                        "state": state,
+                        "pincode": pincode,
+                    },
+                };
+                function loadScript(src) {
+                    return new Promise((resolve) => {
+                        const script = document.createElement("script");
+                        script.src = src;
+                        script.onload = () => {
+                            resolve(true);
+                        };
+                        script.onerror = () => {
+                            resolve(false);
+                        };
+                        document.body.appendChild(script);
+                    });
                 }
-            };
-            function loadScript(src) {
-                return new Promise((resolve) => {
-                    const script = document.createElement("script");
-                    script.src = src;
-                    script.onload = () => {
-                        resolve(true);
-                    };
-                    script.onerror = () => {
-                        resolve(false);
-                    };
-                    document.body.appendChild(script);
-                });
-            }
-            var res = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
-            if (!res) {
-                alert("Razorpay SDK failed to load. Are you online?");
-                return;
+                var res = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
+                if (!res) {
+                    alert("Razorpay SDK failed to load. Are you online?");
+                    return;
+                }
+                else {
+                    var rzp1 = new Razorpay(options);
+                    rzp1.open();
+                    rzp1.on('payment.failed', function (response) {
+                        alert("Payment Failed");
+                        router.push("/checkout");
+                    });
+                }
             }
             else {
-                var rzp1 = new Razorpay(options);
-                rzp1.open();
-                rzp1.on('payment.failed', function (response) {
-                    console.log(response)
-                });
+                toast.error(res2jsonData.error, {
+                    position: "top-center",
+                    autoClose: 900,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                })
             }
-
+        }
+        else {
+            toast.error(orderData.error, {
+                position: "top-center",
+                autoClose: 900,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            })
         }
     }
 
-    // useEffect(() => {
-    //     if (name.length > 0 && email.length>0 && address.length > 0 && phoneno.length ===10 && city.length > 0 && state.length > 0 && pincode.length === 6) {
-    //         setPaymentDisabled(false);
-    //     }
-    //     else {
-    //         setPaymentDisabled(true);
-    //     }
-    // }, [name, email, address, phoneno, city, state, pincode])
+    useEffect(() => {
+        if (name.length > 0 && email.length > 0 && address.length > 0 && phoneno.length === 10 && city.length > 0 && state.length > 0 && pincode.length === 6) {
+            setPaymentDisabled(false);
+        }
+        else {
+            setPaymentDisabled(true);
+        }
+    }, [name, email, address, phoneno, city, state, pincode])
 
 
     return (
@@ -99,6 +186,7 @@ const checkout = (props) => {
                 <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0" />
             </Head>
             <div className="container my-8 w-4/5 mx-auto">
+                <ToastContainer />
                 <form>
                     <h1 className="w-fit mx-auto text-2xl font-bold">
                         Checkout
@@ -237,7 +325,8 @@ const checkout = (props) => {
                                                                             price: props.cart[item].price,
                                                                             name: props.cart[item].name,
                                                                             size: props.cart[item].size,
-                                                                            variant: props.cart[item].variant
+                                                                            variant: props.cart[item].variant,
+                                                                            category: props.cart[item].category
                                                                         })
                                                                     }} />
                                                             </div>
@@ -255,11 +344,13 @@ const checkout = (props) => {
 
                             <button type="submit" className="text-white bg-blue-500 border-0 p-2 focus:outline-none hover:bg-blue-600 rounded w-fit my-4 disabled:cursor-not-allowed disabled:bg-blue-400"
                                 onClick={initiatePayment}
-                            // disabled={paymentDisabled}
+                                disabled={paymentDisabled || props.subTotal === 0}
                             >
-                                <div className="flex flex-row items-center justify-center space-x-1">
+                                <div className="flex flex-row items-center justify-center space-x-2">
                                     <BsFillBagCheckFill className="text-xl" />
-                                    <p>Checkout</p>
+                                    <p>
+                                        Pay ₹‎{props.subTotal}
+                                    </p>
                                 </div>
                             </button>
 

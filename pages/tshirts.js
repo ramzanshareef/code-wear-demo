@@ -33,7 +33,8 @@ const tshirts = (props) => {
                                                 props.tshirts[product].color.sort().map((color, key) => (
                                                     <span className={`inline-flex items-center justify-center px-2 py-1 mr-1 text-xs leading-none text-white bg-${color.toLowerCase()}-500 rounded-3xl 
                                                     ${(color.toLowerCase()==="black")?"bg-black":""} 
-                                                    ${(color.toLowerCase()==="white")?"bg-white text-gray-950 border":""} `} key={key}>{color}</span>
+                                                    ${(color.toLowerCase()!=="white")?"text-white":"text-black bg-white border"} 
+                                                    `} key={key}>{color}</span>
                                                 ))
                                             }
                                         </p>

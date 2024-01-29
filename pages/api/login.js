@@ -29,12 +29,7 @@ const handler = async (req, res) => {
                     const token = jwt.sign({
                         userName: user.name,
                         userEmail: user.email
-                    },"jwtSecret")
-                    
-                    // const token = jwt.sign({
-                    //     userName: user.name,
-                    //     userEmail: user.email
-                    // },"jwtSecret", { expiresIn: "1h" }) // expires the token in 1 hour
+                    }, process.env.NEXT_PUBLIC_JWT_SECRET)
                     
                     res.status(200).json({
                         message: "Login successful",
