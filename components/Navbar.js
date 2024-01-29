@@ -6,6 +6,8 @@ import { IoMdCloseCircle } from "react-icons/io";
 import { FiMinusCircle, FiPlusCircle } from "react-icons/fi";
 import { MdAccountCircle } from "react-icons/md";
 import { useRouter } from 'next/router';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Navbar = (props) => {
     const router = useRouter();
@@ -33,6 +35,7 @@ const Navbar = (props) => {
 
     return (
         <>
+            <ToastContainer />
             <div className="flex flex-col md:flex-row justify-between items-center p-4 space-y-2 md:space-y-0 shadow-md sticky top-0 z-10 bg-white">
                 <div className="logo">
                     <Link href={"/"}>
@@ -40,22 +43,23 @@ const Navbar = (props) => {
                     </Link>
                 </div>
                 <div className="nav">
-                    <ul className="flex flex-col space-y-2 md:space-y-0 justify-center items-center md:flex-row md:space-x-6 p-2 md:items-center">
+                    <ul className="flex md:space-y-0 justify-center items-center md:flex-row space-x-6 p-2">
                         <Link href={"/tshirts"}><li className="hover:text-blue-400">T-shirts</li> </Link>
                         <Link href={"/mugs"}><li className="hover:text-blue-400">Mugs</li> </Link>
                         <Link href={"/hoodies"}><li className="hover:text-blue-400">Hoodies</li> </Link>
                         <Link href={"/stickers"}><li className="hover:text-blue-400">Stickers</li> </Link>
                     </ul>
                 </div>
-                <div className="cart cursor-pointer flex flex-row space-x-2 items-center justify-center" >
+                <div className="cart cursor-pointer flex flex-row space-x-4 items-center justify-center" >
                     {
-                        (props.user.token !== null) && <MdAccountCircle 
-                        onClick={toggleAccountDropdown}
-                        className="text-3xl" />
+                        (props.user.token !== null) && <MdAccountCircle
+                            onMouseEnter={toggleAccountDropdown}
+                            onClick={toggleAccountDropdown}
+                            className="text-3xl" />
                     }
                     {
                         (props.user.token === null) && <Link href={"/login"} >
-                            <p className="text-white bg-blue-400 hover:bg-blue-500 p-2 rounded-lg">Login</p>
+                            <p className="hover:text-blue-400 ">Login</p>
                         </Link>
                     }
 
@@ -63,23 +67,26 @@ const Navbar = (props) => {
                 </div>
             </div>
             <div>
-                <div className="account-dropdown hidden absolute top-16 right-0 bg-blue-200 p-4 rounded-lg z-10">
-                    <ul className="flex flex-col space-y-2 justify-center items-center p-1">
-                        <Link href={"/profile"}><li className="hover:text-blue-400">Profile</li> </Link>
-                        <Link href={"/orders"}><li className="hover:text-blue-400">Orders</li> </Link>
-                        <li 
-                        onClick={()=>{
-                            toggleAccountDropdown();
-                            localStorage.removeItem("token");
-                            props.setUser({token:null});
-                            props.setKey(Math.random());
-                            router.push("/");
-                        }}
-                        className="hover:text-blue-400 cursor-pointer">Logout</li>
+                <div className="account-dropdown hidden absolute top-[8rem] right-[11rem] md:top-14 md:right-7 bg-white border-2 shadow-lg w-28 py-2 rounded-lg z-10"
+                    onMouseLeave={toggleAccountDropdown}
+                    // onPointerLeave={toggleAccountDropdown}
+                >
+                    <ul className="flex flex-col space-y-2 justify-center items-center">
+                        <Link href={"/profile"}><li className="hover:text-blue-400 py-1 text-sm font-semibold">Profile</li> </Link>
+                        <Link href={"/orders"}><li className="hover:text-blue-400 py-1 text-sm font-semibold">Orders</li> </Link>
+                        <li
+                            onClick={() => {
+                                toggleAccountDropdown();
+                                props.logout();
+                                setTimeout(() => {
+                                    router.push("/");
+                                }, 800);
+                            }}
+                            className="hover:text-blue-400 cursor-pointer py-1 text-sm font-semibold">Logout</li>
                     </ul>
                 </div>
             </div>
-            <div ref={cartRef} className={`min-h-screen z-20 w-72 cart-sidebar absolute top-0 right-0 bg-blue-200 p-8 transform transition-transform overflow-y-scroll ${(Object.keys(props.cart).length !== 0) ? "translate-x-0" : "translate-x-full"} `}>
+            <div ref={cartRef} className={`min-h-screen z-20 w-72 cart-sidebar absolute top-0 right-0 bg-blue-200 p-8 transform transition-transform overflow-y-auto ${(Object.keys(props.cart).length !== 0) ? "translate-x-0" : "translate-x-full"} `}>
                 <h2 className="text-2xl font-bold text-center">Cart Details</h2>
                 <p className="absolute top-4 right-2" onClick={toggleCartView}>
                     <IoMdCloseCircle className="text-lg cursor-pointer text-blue-500" />

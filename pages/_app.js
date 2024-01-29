@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import "@/styles/globals.css";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
+import LoadingBar from 'react-top-loading-bar'
 
 export default function App({ Component, pageProps }) {
     const [cart, setCart] = useState({});
@@ -11,9 +12,16 @@ export default function App({ Component, pageProps }) {
     const [user, setUser] = useState({ token: null });
     const [key, setKey] = useState(0);
     const router = useRouter();
+    const [progress, setProgress] = useState(0)
 
     useEffect(() => {
         try {
+            router.events.on("routeChangeStart", () => {
+                setProgress(50)
+            })
+            router.events.on("routeChangeComplete", () => {
+                setProgress(100)
+            })
             if (localStorage.getItem("cart")) {
                 setCart(JSON.parse(localStorage.getItem("cart")));
                 setSubTotal(JSON.parse(localStorage.getItem("subTotal")));
@@ -69,10 +77,22 @@ export default function App({ Component, pageProps }) {
         setCart(newCart);
         saveCart(newCart);
     }
+    const logout = () => {
+        localStorage.removeItem("token");
+        setUser({ token: null });
+        setKey(Math.random());
+        router.push("/");
+    }
 
 
     return <>
-        <Navbar user={user} setUser={setUser} key={key} setKey={setKey} cart={cart} addToCart={addToCart} buyNow={buyNow} removeFromCart={removeFromCart} clearCart={clearCart} subTotal={subTotal} />
+        <LoadingBar
+            color='#0000ff'
+            progress={progress}
+            waitingTime={500}
+            onLoaderFinished={() => setProgress(0)}
+        />
+        <Navbar user={user} setUser={setUser} key={key} setKey={setKey} logout={logout} cart={cart} addToCart={addToCart} buyNow={buyNow} removeFromCart={removeFromCart} clearCart={clearCart} subTotal={subTotal} />
         <Component cart={cart} addToCart={addToCart} buyNow={buyNow} removeFromCart={removeFromCart} clearCart={clearCart} subTotal={subTotal} {...pageProps} />
         <Footer />
     </>
