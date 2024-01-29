@@ -12,7 +12,7 @@ const signup = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
-			const res = await fetch("http://localhost:3000/api/signup", {
+			const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/signup`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -20,7 +20,7 @@ const signup = () => {
 				body: JSON.stringify({ name, email, password }),
 			});
 			const data = await res.json();
-			toast.success(data.message,{
+			toast.success(data.message, {
 				position: "top-center",
 				autoClose: 1500,
 				hideProgressBar: false,
@@ -32,7 +32,7 @@ const signup = () => {
 			setName("");
 			setEmail("");
 			setPassword("");
-		} 
+		}
 		catch (err) {
 			console.log(err);
 		}
@@ -40,7 +40,7 @@ const signup = () => {
 
 	useEffect(() => {
 		if (localStorage.getItem("token")) {
-			router.push("/");
+			router.push(process.env.NEXT_PUBLIC_HOST);
 		}
 	}, []);
 

@@ -24,7 +24,7 @@ const Slug = (props) => {
             return;
         }
         else {
-            const pincodes = await fetch("http://localhost:3000/api/pincode");
+            const pincodes = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/pincode`);
             const data = await pincodes.json();
             if (data.pincodes.includes(Number(pin)) === true) {
                 toast.success("Hurray! We deliver to this pin code.",{
@@ -86,7 +86,7 @@ const Slug = (props) => {
         if (localStorage.getItem("effectRan") === null || localStorage.getItem("effectRan") === "false") {
             if (props.colorSizeSlug[color] !== undefined) {
                 if (props.colorSizeSlug[color][size] !== undefined) {
-                    // let url = `http://localhost:3000/product/${props.colorSizeSlug[color][size].slug}`;
+                    // let url = `http://${proces.env.HOST}/product/${props.colorSizeSlug[color][size].slug}`;
                     // window.location = url;
                     let routerURL = `/product/${props.colorSizeSlug[color][size].slug}`
                     router.push(routerURL);
@@ -94,7 +94,7 @@ const Slug = (props) => {
                     localStorage.setItem("effectRan", "true");
                 }
                 else {
-                    // let url = `http://localhost:3000/product/${props.colorSizeSlug[color][Object.keys(props.colorSizeSlug[color])[0]].slug}`;
+                    // let url = `http://${proces.env.HOST}/product/${props.colorSizeSlug[color][Object.keys(props.colorSizeSlug[color])[0]].slug}`;
                     // window.location = url;
                     let routerURL = `/product/${props.colorSizeSlug[color][Object.keys(props.colorSizeSlug[color])[0]].slug}`
                     router.push(routerURL);
@@ -104,7 +104,7 @@ const Slug = (props) => {
             }
             else if (props.colorSizeSlug[size] !== undefined) {
                 if (props.colorSizeSlug[color][size] !== undefined) {
-                    // let url = `http://localhost:3000/product/${props.colorSizeSlug[color][size].slug}`;
+                    // let url = `http://${proces.env.HOST}/product/${props.colorSizeSlug[color][size].slug}`;
                     // window.location = url;
                     let routerURL = `/product/${props.colorSizeSlug[color][size].slug}`
                     router.push(routerURL);
@@ -114,7 +114,7 @@ const Slug = (props) => {
                 else {
                     console.log("color was not available")
                     console.log("Size, Color = ", size, color)
-                    // let url = `http://localhost:3000/product/${props.colorSizeSlug[color][Object.keys(props.colorSizeSlug[color])[0]].slug}`;
+                    // let url = `http://${proces.env.HOST}/product/${props.colorSizeSlug[color][Object.keys(props.colorSizeSlug[color])[0]].slug}`;
                     // window.location = url;
                     let routerURL = `/product/${props.colorSizeSlug[color][Object.keys(props.colorSizeSlug[color])[0]].slug}`
                     router.push(routerURL);
@@ -271,7 +271,7 @@ const Slug = (props) => {
 
 export async function getServerSideProps(context) {
     if (!mongoose.connections[0].readyState) {
-        await mongoose.connect(process.env.MONGODB_URL || "mongodb://127.0.0.1:27017/ecommerce")
+        await mongoose.connect(process.env.NEXT_PUBLIC_MONGO_URL || "mongodb://127.0.0.1:27017/ecommerce")
     }
     let product = await Product.findOne({ slug: context.query.slug });
     let variants = await Product.find({ title: product.title, category: product.category });

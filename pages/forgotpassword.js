@@ -6,7 +6,7 @@ const forgotpassword = () => {
     const router = useRouter();
     useEffect(() => {
         if (localStorage.getItem("token")) {
-            router.push("/");
+            router.push(process.env.NEXT_PUBLIC_HOST);
         }
     }, []);
 

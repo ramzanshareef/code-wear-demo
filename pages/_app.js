@@ -81,7 +81,7 @@ export default function App({ Component, pageProps }) {
         localStorage.removeItem("token");
         setUser({ token: null });
         setKey(Math.random());
-        router.push("/");
+        router.push(process.env.NEXT_PUBLIC_HOST);
     }
 
 

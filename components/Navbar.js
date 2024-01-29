@@ -39,7 +39,7 @@ const Navbar = (props) => {
             <div className="flex flex-col md:flex-row justify-between items-center p-4 space-y-2 md:space-y-0 shadow-md sticky top-0 z-10 bg-white">
                 <div className="logo">
                     <Link href={"/"}>
-                        <Image src="/vercel.svg" width={100} height={90} alt="home" />
+                        <Image src="/vercel.svg" width={100} height={90} alt="home"  />
                     </Link>
                 </div>
                 <div className="nav">
@@ -69,7 +69,7 @@ const Navbar = (props) => {
             <div>
                 <div className="account-dropdown hidden absolute top-[8rem] right-[11rem] md:top-14 md:right-7 bg-white border-2 shadow-lg w-28 py-2 rounded-lg z-10"
                     onMouseLeave={toggleAccountDropdown}
-                    // onPointerLeave={toggleAccountDropdown}
+                // onPointerLeave={toggleAccountDropdown}
                 >
                     <ul className="flex flex-col space-y-2 justify-center items-center">
                         <Link href={"/profile"}><li className="hover:text-blue-400 py-1 text-sm font-semibold">Profile</li> </Link>
@@ -79,7 +79,7 @@ const Navbar = (props) => {
                                 toggleAccountDropdown();
                                 props.logout();
                                 setTimeout(() => {
-                                    router.push("/");
+                                    router.push(process.env.NEXT_PUBLIC_HOST);
                                 }, 800);
                             }}
                             className="hover:text-blue-400 cursor-pointer py-1 text-sm font-semibold">Logout</li>

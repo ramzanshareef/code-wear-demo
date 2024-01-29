@@ -2,10 +2,25 @@ import React from "react";
 import Link from "next/link";
 import { IoRemoveCircleOutline, IoAddCircleOutline } from "react-icons/io5";
 import { BsFillBagCheckFill } from "react-icons/bs";
+import Head from "next/head";
+import Script from "next/script";
 
 const checkout = (props) => {
+    const initiatePayment = async (e) => {
+        e.preventDefault();
+        alert("Payment done");
+    }
+
+
+
     return (
         <div>
+            <Head>
+                <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0" />
+            </Head>
+            <Script>
+                <Script src="https://checkout.razorpay.com/v1/checkout.js"></Script>
+            </Script>
             <div className="container my-8 w-4/5 mx-auto">
                 <form>
                     <h1 className="w-fit mx-auto text-2xl font-bold">
@@ -116,7 +131,9 @@ const checkout = (props) => {
                                 </div>
                             </div>
 
-                            <button type="submit" className="text-white bg-blue-500 border-0 p-2 focus:outline-none hover:bg-blue-600 rounded w-fit my-4">
+                            <button type="submit" className="text-white bg-blue-500 border-0 p-2 focus:outline-none hover:bg-blue-600 rounded w-fit my-4"
+                            onClick={initiatePayment}
+                            >
                                 <div className="flex flex-row items-center justify-center space-x-1">
                                     <BsFillBagCheckFill className="text-xl" />
                                     <p>Checkout</p>
