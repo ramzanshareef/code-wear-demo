@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const checkout = (props) => {
+const checkout = ({ subTotal, cart, clearCart, removeFromCart, addToCart }) => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [address, setAddress] = useState("");
@@ -21,6 +21,26 @@ const checkout = (props) => {
     const pincodeEffectRan = useRef(false);
     const [pincodeError, setPincodeError] = useState(false);
 
+    useEffect(() => {
+        if (localStorage.getItem("token") === null) {
+            router.push("/login");
+        }
+        const fetchUser = async () => {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/getUserOrders`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ token: localStorage.getItem("token") }),
+            });
+            if (res.status === 200) {
+                const data = await res.json();
+                setEmail(data.user.email);
+            }
+        }
+        fetchUser();
+    }, [])
+
     const initiatePayment = async (e) => {
         e.preventDefault();
         const response1 = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/pretransaction`, {
@@ -31,8 +51,8 @@ const checkout = (props) => {
             body: JSON.stringify({
                 email: email,
                 address: address,
-                amount: props.subTotal,
-                products: props.cart
+                amount: subTotal,
+                products: cart
             }),
         });
         const orderData = await response1.json();
@@ -57,7 +77,7 @@ const checkout = (props) => {
                     "image": "https://scontent.fvga2-1.fna.fbcdn.net/v/t39.30808-6/333269272_729527645556981_8288775143650171103_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=efb6e6&_nc_ohc=OMfzubTugDAAX88YZIl&_nc_ht=scontent.fvga2-1.fna&oh=00_AfAbys8Jry1G7eNicpd5AkVK80Esu_daSF-zFOGssNIkbw&oe=65BC80FE",
                     "order_id": paymentInitData.order.id,
                     "handler": async function (response) {
-                        const response3 = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/postransaction`, {
+                        const response3 = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/posttransaction`, {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json",
@@ -67,12 +87,11 @@ const checkout = (props) => {
                                 orderID: paymentInitData.order.id,
                                 paymentID: response.razorpay_payment_id,
                                 amount: paymentInitData.order.amount,
+                                cart: cart,
                             }),
                         });
                         const res3jsonData = await response3.json();
                         if (response3.status === 200) {
-                            props.clearCart();
-                            router.push(`/order?orderID=${res3jsonData.order.orderID}`);
                             toast.success("Payment Successful! 🎉", {
                                 position: "top-center",
                                 autoClose: 900,
@@ -81,6 +100,10 @@ const checkout = (props) => {
                                 pauseOnHover: true,
                                 draggable: true,
                                 progress: undefined,
+                                onClose: () => {
+                                    clearCart();
+                                    router.push(`/order?orderID=${res3jsonData.order.orderID}`);
+                                }
                             })
                         } else {
                             toast.error(res3jsonData.error, {
@@ -148,14 +171,18 @@ const checkout = (props) => {
         else {
             toast.error(orderData.error, {
                 position: "top-center",
-                autoClose: 900,
+                autoClose: 4000,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
+                onClose: () => {
+                    clearCart();
+                }
             })
         }
+
     }
 
     useEffect(() => {
@@ -241,11 +268,7 @@ const checkout = (props) => {
                                         <input type="email" name="email" className="w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                                             required
                                             value={email}
-                                            onChange={
-                                                (e) => {
-                                                    setEmail(e.target.value);
-                                                }
-                                            }
+                                            disabled={true}
                                         />
                                     </div>
                                 </div>
@@ -290,7 +313,7 @@ const checkout = (props) => {
                                                 }
                                             }
                                         />
-                                        <p className={`text-red-400 my-1 ${pincodeError===true?"":"invisible"} `}>
+                                        <p className={`text-red-400 my-1 ${pincodeError === true ? "" : "invisible"} `}>
                                             Pincode not serviceable
                                         </p>
                                     </div>
@@ -319,35 +342,35 @@ const checkout = (props) => {
                                 <div className="w-[95%] mx-auto">
                                     <ol className="list-decimal my-2">
                                         {
-                                            Object.keys(props.cart).length === 0 && <p className="text-center">Cart is empty</p>
+                                            Object.keys(cart).length === 0 && <p className="text-center">Cart is empty</p>
                                         }
-                                        {props.cart && Object.keys(props.cart).map((item, index) => {
+                                        {cart && Object.keys(cart).map((item, index) => {
                                             return (
                                                 <li className="p-3" key={index}>
                                                     <div className="flex justify-between items-center">
                                                         <div className="w-full flex flex-row">
                                                             <div className="w-2/3 ">
-                                                                {props.cart[item].name + "(" + props.cart[item].size + "/" + props.cart[item].color + ")"}
+                                                                {cart[item].name + "(" + cart[item].size + "/" + cart[item].color + ")"}
                                                             </div>
                                                             <div className="flex items-center justify-center w-1/3 space-x-2">
                                                                 <IoRemoveCircleOutline className="text-lg cursor-pointer"
                                                                     onClick={() => {
-                                                                        props.removeFromCart({
+                                                                        removeFromCart({
                                                                             itemCode: item,
                                                                             qty: 1,
                                                                         })
                                                                     }} />
-                                                                <p className="text-md">{props.cart[item].qty}</p>
+                                                                <p className="text-md">{cart[item].qty}</p>
                                                                 <IoAddCircleOutline className="text-lg cursor-pointer"
                                                                     onClick={() => {
-                                                                        props.addToCart({
+                                                                        addToCart({
                                                                             itemCode: item,
                                                                             qty: 1,
-                                                                            price: props.cart[item].price,
-                                                                            name: props.cart[item].name,
-                                                                            size: props.cart[item].size,
-                                                                            variant: props.cart[item].variant,
-                                                                            category: props.cart[item].category
+                                                                            price: cart[item].price,
+                                                                            name: cart[item].name,
+                                                                            size: cart[item].size,
+                                                                            variant: cart[item].variant,
+                                                                            category: cart[item].category
                                                                         })
                                                                     }} />
                                                             </div>
@@ -358,19 +381,19 @@ const checkout = (props) => {
                                         })}
                                     </ol>
                                     <span className="font-bold text-xl">
-                                        Subtotal : ₹‎{props.subTotal}
+                                        Subtotal : ₹‎{subTotal}
                                     </span>
                                 </div>
                             </div>
 
                             <button type="submit" className="text-white bg-blue-500 border-0 p-2 focus:outline-none hover:bg-blue-600 rounded w-fit my-4 disabled:cursor-not-allowed disabled:bg-blue-400"
                                 onClick={initiatePayment}
-                                disabled={paymentDisabled || props.subTotal === 0}
+                                disabled={paymentDisabled || subTotal === 0}
                             >
                                 <div className="flex flex-row items-center justify-center space-x-2">
                                     <BsFillBagCheckFill className="text-xl" />
                                     <p>
-                                        Pay ₹‎{props.subTotal}
+                                        Pay ₹‎{subTotal}
                                     </p>
                                 </div>
                             </button>

@@ -1,4 +1,5 @@
 import Order from "@/models/Order";
+import Product from "@/models/Product";
 
 export default async function handler(req, res) {
     try {
@@ -29,6 +30,19 @@ export default async function handler(req, res) {
                 order.status = "paid";
                 order.paymentID = paymentID;
                 order.orderID = orderID;
+                let cart = req.body.cart;
+                for (let key in cart) {
+                    let product = await Product.findById(key);
+                    if (!product) {
+                        return res.status(404).json({ error: "Some Products were not found" });
+                    }
+                    if (product.availableQty < cart[key].qty) {
+                        return res.status(500).json({ error: "Some Products are not available" });
+                    }
+                    product.availableQty -= cart[key].qty;
+                    await product.save();
+                }
+
                 await order.save();
                 return res.status(200).json({
                     message: "Order updated successfully",
