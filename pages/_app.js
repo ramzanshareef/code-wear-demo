@@ -9,7 +9,7 @@ export default function App({ Component, pageProps }) {
     const [cart, setCart] = useState({});
     const [subTotal, setSubTotal] = useState(0);
     const effectRan = useRef(false);
-    const [user, setUser] = useState("");
+    const [user, setUser] = useState({ token: null });
     const [key, setKey] = useState(0);
     const router = useRouter();
     const [progress, setProgress] = useState(0);
@@ -28,7 +28,7 @@ export default function App({ Component, pageProps }) {
             }
             let token = localStorage.getItem("token");
             if (token) {
-                setUser(token);
+                setUser({token: token});
                 setKey(Math.random());
             }
         } catch (e) {
@@ -54,6 +54,7 @@ export default function App({ Component, pageProps }) {
             newCart[itemCode] = { qty, price, name, size, color, category };
         }
         setCart(newCart);
+        setKey(Math.random());
         saveCart(newCart);
     }
     const removeFromCart = ({ itemCode, qty }) => {
@@ -81,7 +82,7 @@ export default function App({ Component, pageProps }) {
         localStorage.removeItem("token");
         setUser({ token: null });
         setKey(Math.random());
-        router.push(process.env.NEXT_PUBLIC_HOST);
+        router.push("/");
     }
 
 

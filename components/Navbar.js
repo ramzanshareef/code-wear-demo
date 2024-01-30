@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { IoCartOutline } from "react-icons/io5";
 import { IoMdCloseCircle } from "react-icons/io";
 import { FiMinusCircle, FiPlusCircle } from "react-icons/fi";
@@ -12,20 +12,26 @@ import 'react-toastify/dist/ReactToastify.css';
 const Navbar = (props) => {
     const router = useRouter();
     const cartRef = useRef();
+    const [showSidebar, setShowSidebar] = useState(false);
+    useEffect(() => {
+        if (Object.keys(props.cart).length === 0) {
+            setShowSidebar(false);
+        }
+        else if (Object.keys(props.cart).length !== 0) {
+            setShowSidebar(true);
+        }
+        let exceptedFromCart = ["/checkout", "/profile", "/orders"];
+        if (exceptedFromCart.includes(router.pathname)) {
+            setShowSidebar(false);
+        }
+    }, [])
     const toggleCartView = () => {
-        if (cartRef.current.classList.contains("translate-x-full")) {
-            cartRef.current.classList.remove("translate-x-full")
-            cartRef.current.classList.add("translate-x-0")
-        }
-        else if (!cartRef.current.classList.contains("translate-x-full")) {
-            cartRef.current.classList.add("translate-x-full")
-            cartRef.current.classList.remove("translate-x-0")
-        }
+        setShowSidebar(!showSidebar);
     }
     const toggleAccountDropdown = () => {
         if (document.querySelector(".account-dropdown").classList.contains("hidden")) {
-            document.querySelector(".account-dropdown").classList.remove("hidden")
             document.querySelector(".account-dropdown").classList.add("block")
+            document.querySelector(".account-dropdown").classList.remove("hidden")
         }
         else if (!document.querySelector(".account-dropdown").classList.contains("hidden")) {
             document.querySelector(".account-dropdown").classList.add("hidden")
@@ -39,7 +45,7 @@ const Navbar = (props) => {
             <div className="flex flex-col md:flex-row justify-between items-center p-4 space-y-2 md:space-y-0 shadow-md sticky top-0 z-10 bg-white">
                 <div className="logo">
                     <Link href={"/"}>
-                        <Image src="/vercel.svg" width={100} height={90} alt="home"  />
+                        <Image src="/vercel.svg" width={100} height={90} alt="home" />
                     </Link>
                 </div>
                 <div className="nav">
@@ -67,7 +73,7 @@ const Navbar = (props) => {
                 </div>
             </div>
             <div>
-                <div className="account-dropdown hidden fixed top-[8rem] right-[11rem] md:top-14 md:right-7 bg-white border-2 shadow-lg w-28 py-2 rounded-lg z-10"
+                <div className="account-dropdown fixed hidden top-[8rem] max-md:left-[7rem] md:top-14 md:right-7 bg-white border-2 shadow-lg w-28 py-2 rounded-lg z-10"
                     onMouseLeave={toggleAccountDropdown}
                 // onPointerLeave={toggleAccountDropdown}
                 >
@@ -78,15 +84,13 @@ const Navbar = (props) => {
                             onClick={() => {
                                 toggleAccountDropdown();
                                 props.logout();
-                                setTimeout(() => {
-                                    router.push(process.env.NEXT_PUBLIC_HOST);
-                                }, 800);
+                                router.push("/");
                             }}
                             className="hover:text-blue-400 cursor-pointer py-1 text-sm font-semibold">Logout</li>
                     </ul>
                 </div>
             </div>
-            <div ref={cartRef} className={`min-h-screen z-20 w-72 cart-sidebar absolute top-0 right-0 bg-blue-200 p-8 transform transition-transform overflow-y-auto ${(Object.keys(props.cart).length !== 0) ? "translate-x-0" : "translate-x-full"} `}>
+            <div ref={cartRef} className={`min-h-screen z-20 max-md:w-[18rem] w-[19rem] overflow-y-auto max-md:text-sm cart-sidebar fixed top-0 bg-blue-200 p-8 transition-all ${showSidebar === true ? "right-0" : "-right-96"}`}>
                 <h2 className="text-2xl font-bold text-center">Cart Details</h2>
                 <p className="absolute top-4 right-2" onClick={toggleCartView}>
                     <IoMdCloseCircle className="text-lg cursor-pointer text-blue-500" />
@@ -136,17 +140,21 @@ const Navbar = (props) => {
                 </p>
                 <div className="flex space-x-2 my-2 items-center justify-start">
                     <Link href={"/checkout"}>
-                        <button className="flex items-center space-x-2 text-white bg-blue-500 border-0 py-2 px-4 focus:outline-none hover:bg-blue-600 rounded">
+                        <button className="flex items-center space-x-2 text-white bg-blue-500 border-0 py-2 px-4 focus:outline-none hover:bg-blue-600 rounded disabled:bg-blue-400 disabled:cursor-not-allowed" disabled={Object.keys(props.cart).length === 0 ? true : false} >
                             <IoCartOutline className="text-xl" />
                             <p>
                                 Checkout
                             </p>
                         </button>
                     </Link>
-                    <button className="flex items-center space-x-2 text-white bg-blue-500 border-0 py-2 px-4 focus:outline-none hover:bg-blue-600 rounded"
-                        onClick={props.clearCart}
+                    <button className="flex items-center space-x-2 text-white bg-blue-500 border-0 py-2 px-4 focus:outline-none hover:bg-blue-600 rounded disabled:bg-blue-400 disabled:cursor-not-allowed"
+                        onClick={() => {
+                            props.clearCart();
+                            props.setKey(Math.random());
+                        }}
+                        disabled={Object.keys(props.cart).length === 0 ? true : false}
                     >
-                        Clear
+                        Clear Cart
                     </button>
                 </div>
             </div>

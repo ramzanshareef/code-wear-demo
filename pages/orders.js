@@ -8,7 +8,7 @@ const orders = (props) => {
     const [orders, setOrders] = useState([]);
     useEffect(() => {
         if (!localStorage.getItem("token")) {
-            router.push(process.env.NEXT_PUBLIC_HOST)
+            router.push("/login"    )
         }
         else {
             let token = localStorage.getItem("token");

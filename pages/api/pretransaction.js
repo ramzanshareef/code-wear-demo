@@ -8,6 +8,9 @@ const handler = async (req, res) => {
             res.status(405).json({ error: "Method not allowed" });
         }
         const amountRequest = req.body.amount;
+        if (!amountRequest || amountRequest <= 0) {
+            return res.status(500).json({ error: "Invalid amount" });
+        }
         let amountActual = 0;
         const producstsRequest = req.body.products;
         for (let key in producstsRequest) {
