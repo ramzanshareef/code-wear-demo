@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { IoRemoveCircleOutline, IoAddCircleOutline } from "react-icons/io5";
 import { BsFillBagCheckFill } from "react-icons/bs";
@@ -18,6 +18,8 @@ const checkout = (props) => {
     const [pincode, setPincode] = useState("");
     const [paymentDisabled, setPaymentDisabled] = useState(true);
     const router = useRouter();
+    const pincodeEffectRan = useRef(false);
+    const [pincodeError, setPincodeError] = useState(false);
 
     const initiatePayment = async (e) => {
         e.preventDefault();
@@ -35,7 +37,6 @@ const checkout = (props) => {
         });
         const orderData = await response1.json();
         if (response1.status === 200) {
-            // const order = await response1.json();
             const response2 = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/handlePayment`, {
                 method: "POST",
                 headers: {
@@ -47,8 +48,7 @@ const checkout = (props) => {
             });
             const paymentInitData = await response2.json();
             if (response2.status === 200) {
-                // const paymentInitData = await response2.json();
-                var options = {
+                let options = {
                     "key": process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
                     "amount": paymentInitData.order.amount,
                     "currency": "INR",
@@ -159,6 +159,44 @@ const checkout = (props) => {
     }
 
     useEffect(() => {
+        try {
+            if (pincode.length === 6) {
+                const fetchPincode = async () => {
+                    const response = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/pincode`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            pincode: pincode,
+                        }),
+                    });
+                    const jsonData = await response.json();
+                    if (response.status === 200) {
+                        setCity(jsonData.data.city);
+                        setState(jsonData.data.state);
+                        setPincodeError(false);
+                    }
+                    else {
+                        setPincodeError(true);
+                        setCity("");
+                        setState("");
+                    }
+                }
+                fetchPincode();
+            }
+            else {
+                setCity("");
+                setState("");
+            }
+        }
+        catch (err) {
+            console.log(err.message)
+            router.push("/checkout");
+        }
+    }, [pincode])
+
+    useEffect(() => {
         if (name.length > 0 && email.length > 0 && address.length > 0 && phoneno.length === 10 && city.length > 0 && state.length > 0 && pincode.length === 6) {
             setPaymentDisabled(false);
         }
@@ -240,30 +278,6 @@ const checkout = (props) => {
                                         />
                                     </div>
                                     <div className="w-full md:w-1/5">
-                                        <label htmlFor="city" className="leading-7 text-sm text-gray-600">City</label>
-                                        <input type="text" name="city" className="w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-                                            required
-                                            value={city}
-                                            onChange={
-                                                (e) => {
-                                                    setCity(e.target.value);
-                                                }
-                                            }
-                                        />
-                                    </div>
-                                    <div className="w-full md:w-1/5">
-                                        <label htmlFor="city" className="leading-7 text-sm text-gray-600">State</label>
-                                        <input type="text" name="city" className="w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-                                            required
-                                            value={state}
-                                            onChange={
-                                                (e) => {
-                                                    setState(e.target.value);
-                                                }
-                                            }
-                                        />
-                                    </div>
-                                    <div className="w-full md:w-1/5">
                                         <label htmlFor="pincode" className="leading-7 text-sm text-gray-600">Pin Code</label>
                                         <input type="number" name="pincode" className="w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                                             required
@@ -275,6 +289,25 @@ const checkout = (props) => {
                                                     setPincode(e.target.value);
                                                 }
                                             }
+                                        />
+                                        <p className={`text-red-400 my-1 ${pincodeError===true?"":"invisible"} `}>
+                                            Pincode not serviceable
+                                        </p>
+                                    </div>
+                                    <div className="w-full md:w-1/5">
+                                        <label htmlFor="city" className="leading-7 text-sm text-gray-600">City</label>
+                                        <input type="text" name="city" className="w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out disabled:cursor-not-allowed"
+                                            required
+                                            value={city}
+                                            disabled={true}
+                                        />
+                                    </div>
+                                    <div className="w-full md:w-1/5">
+                                        <label htmlFor="city" className="leading-7 text-sm text-gray-600">State</label>
+                                        <input type="text" name="city" className="w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out disabled:cursor-not-allowed"
+                                            required
+                                            value={state}
+                                            disabled={true}
                                         />
                                     </div>
                                 </div>

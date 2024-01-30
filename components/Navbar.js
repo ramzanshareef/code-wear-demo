@@ -67,7 +67,7 @@ const Navbar = (props) => {
                 </div>
             </div>
             <div>
-                <div className="account-dropdown hidden absolute top-[8rem] right-[11rem] md:top-14 md:right-7 bg-white border-2 shadow-lg w-28 py-2 rounded-lg z-10"
+                <div className="account-dropdown hidden fixed top-[8rem] right-[11rem] md:top-14 md:right-7 bg-white border-2 shadow-lg w-28 py-2 rounded-lg z-10"
                     onMouseLeave={toggleAccountDropdown}
                 // onPointerLeave={toggleAccountDropdown}
                 >

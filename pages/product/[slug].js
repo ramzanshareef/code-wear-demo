@@ -24,9 +24,14 @@ const Slug = (props) => {
             return;
         }
         else {
-            const pincodes = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/pincode`);
-            const data = await pincodes.json();
-            if (data.pincodes.includes(Number(pin)) === true) {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/pincode`,{
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ pincode: Number(pin) })
+            });
+            if (res.status === 200) {
                 toast.success("Hurray! We deliver to this pin code.", {
                     position: "top-center",
                     autoClose: 1500,
