@@ -5,10 +5,13 @@ import { useRouter } from "next/router"
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Error from "next/error";
 
 const Slug = (props) => {
-    let colors = ["bg-red-500", "bg-blue-500", "bg-green-500", "bg-yellow-500", "bg-pink-500", "bg-purple-500", "bg-indigo-500", "bg-gray-500", "bg-black-500", "bg-white-500", "bg-black"];
-
+    if (props.error) {
+        return <Error  statusCode={404} />
+    }
+    let colors = ["bg-red-500", "bg-blue-500", "bg-green-500", "bg-yellow-500", "bg-pink-500", "bg-purple-500", "bg-blue-500", "bg-gray-500", "bg-black-500", "bg-white-500", "bg-black"];
     const router = useRouter();
     const { slug } = router.query;
     const [pin, setPin] = useState("");
@@ -57,26 +60,26 @@ const Slug = (props) => {
 
     }
     const addToCart = () => {
-            toast.success("Added to cart successfully", {
-                position: "top-center",
-                autoClose: 400,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                onClose: () => {
-                    props.addToCart({
-                        itemCode: props.product._id,
-                        qty: 1,
-                        price: props.product.price,
-                        name: props.product.title,
-                        size: props.product.size,
-                        color: props.product.color,
-                        category: props.product.category
-                    });
-                }
-            });
+        toast.success("Added to cart successfully", {
+            position: "top-center",
+            autoClose: 400,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            onClose: () => {
+                props.addToCart({
+                    itemCode: props.product._id,
+                    qty: 1,
+                    price: props.product.price,
+                    name: props.product.title,
+                    size: props.product.size,
+                    color: props.product.color,
+                    category: props.product.category
+                });
+            }
+        });
     }
     const buyNow = () => {
         props.buyNow({
@@ -137,6 +140,8 @@ const Slug = (props) => {
         }
     }, [color, size])
 
+
+
     return (
         <div>
             <ToastContainer />
@@ -153,19 +158,19 @@ const Slug = (props) => {
                             {/* Reviews and share to social media */}
                             {/* <div className="flex mb-4">
                                 <span className="flex items-center">
-                                    <svg fill="currentColor" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-4 h-4 text-indigo-500" viewBox="0 0 24 24">
+                                    <svg fill="currentColor" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-4 h-4 text-blue-500" viewBox="0 0 24 24">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
                                     </svg>
-                                    <svg fill="currentColor" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-4 h-4 text-indigo-500" viewBox="0 0 24 24">
+                                    <svg fill="currentColor" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-4 h-4 text-blue-500" viewBox="0 0 24 24">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
                                     </svg>
-                                    <svg fill="currentColor" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-4 h-4 text-indigo-500" viewBox="0 0 24 24">
+                                    <svg fill="currentColor" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-4 h-4 text-blue-500" viewBox="0 0 24 24">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
                                     </svg>
-                                    <svg fill="currentColor" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-4 h-4 text-indigo-500" viewBox="0 0 24 24">
+                                    <svg fill="currentColor" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-4 h-4 text-blue-500" viewBox="0 0 24 24">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
                                     </svg>
-                                    <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-4 h-4 text-indigo-500" viewBox="0 0 24 24">
+                                    <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-4 h-4 text-blue-500" viewBox="0 0 24 24">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
                                     </svg>
                                     <span className="text-gray-600 ml-3">4 Reviews</span>
@@ -214,7 +219,7 @@ const Slug = (props) => {
                                 <div className="flex ml-6 items-center">
                                     <span className="mr-3">Size</span>
                                     <div className="relative">
-                                        <select className="rounded border appearance-none border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 text-base pl-3 pr-10"
+                                        <select className="rounded border appearance-none border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500 text-base pl-3 pr-10"
                                             onChange={
                                                 (e) => {
                                                     localStorage.setItem("effectRan", "false");
@@ -242,12 +247,13 @@ const Slug = (props) => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="flex">
-                                <span className="title-font font-medium text-2xl text-gray-900">₹‎{props.product.price}</span>
-                                <button className="flex ml-6 text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"
+                            <div className="inline-flex flex-row max-md:space-x-2 items-center justify-center">
+                                {props.product.availableQty > 0 && <span className=" font-medium text-2xl text-gray-900">₹‎{props.product.price}</span>}
+                                {props.product.availableQty <= 0 && <span className="max-md:text-sm font-medium text-2xl text-gray-900">Out of Stock!</span>}
+                                <button disabled={props.product.availableQty <= 0} className="flex ml-6 text-white bg-blue-500 border-0 py-2 px-6 focus:outline-none hover:bg-blue-600 rounded disabled:bg-blue-400 disabled:cursor-not-allowed"
                                     onClick={buyNow}
                                 >Buy Now</button>
-                                <button className="flex ml-6 text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"
+                                <button disabled={props.product.availableQty <= 0} className="flex ml-6 text-white bg-blue-500 border-0 py-2 px-6 focus:outline-none hover:bg-blue-600 rounded disabled:bg-blue-400 disabled:cursor-not-allowed"
                                     onClick={addToCart}
                                 >Add To Cart</button>
 
@@ -264,7 +270,7 @@ const Slug = (props) => {
                                     placeholder="Enter Your Pincode"
                                     inputMode="numeric"
                                 />
-                                <button className="text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"
+                                <button className="text-white bg-blue-500 border-0 py-2 px-6 focus:outline-none hover:bg-blue-600 rounded"
                                     onClick={checkServiceAvailability}
                                 >
                                     Check Pin
@@ -279,10 +285,18 @@ const Slug = (props) => {
 }
 
 export async function getServerSideProps(context) {
+    let error = null;
     if (!mongoose.connections[0].readyState) {
         await mongoose.connect(process.env.NEXT_PUBLIC_MONGO_URL || "mongodb://127.0.0.1:27017/ecommerce")
     }
     let product = await Product.findOne({ slug: context.query.slug });
+    if (product === null) {
+        return {
+            props: {
+                error: "Product not found"
+            }
+        }
+    }
     let variants = await Product.find({ title: product.title, category: product.category });
     let colorSizeSlug = {};
     for (let item of variants) {
