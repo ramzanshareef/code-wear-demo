@@ -9,7 +9,7 @@ export default function App({ Component, pageProps }) {
     const [cart, setCart] = useState({});
     const [subTotal, setSubTotal] = useState(0);
     const effectRan = useRef(false);
-    const [user, setUser] = useState({ token: null });
+    const [user, setUser] = useState("");
     const [key, setKey] = useState(0);
     const router = useRouter();
     const [progress, setProgress] = useState(0);
@@ -28,7 +28,7 @@ export default function App({ Component, pageProps }) {
             }
             let token = localStorage.getItem("token");
             if (token) {
-                setUser({ token: token });
+                setUser(token);
                 setKey(Math.random());
             }
         } catch (e) {
@@ -93,7 +93,7 @@ export default function App({ Component, pageProps }) {
             onLoaderFinished={() => setProgress(0)}
         />
         <Navbar user={user} setUser={setUser} key={key} setKey={setKey} logout={logout} cart={cart} addToCart={addToCart} buyNow={buyNow} removeFromCart={removeFromCart} clearCart={clearCart} subTotal={subTotal} />
-        <Component cart={cart} addToCart={addToCart} buyNow={buyNow} removeFromCart={removeFromCart} clearCart={clearCart} subTotal={subTotal} {...pageProps} />
+        <Component cart={cart} addToCart={addToCart} buyNow={buyNow} removeFromCart={removeFromCart} clearCart={clearCart} subTotal={subTotal} user={user} setUser={setUser} {...pageProps} />
         <Footer />
     </>
 }

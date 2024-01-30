@@ -12,7 +12,7 @@ const OrderSchema = new mongoose.Schema({
         type: String,
     },
     products: {
-        type: Object,
+        type: Array,
         required: true,
     },
     address: {

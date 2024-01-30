@@ -17,7 +17,6 @@ const checkout = (props) => {
     const [state, setState] = useState("");
     const [pincode, setPincode] = useState("");
     const [paymentDisabled, setPaymentDisabled] = useState(true);
-    const [paymentInfo, setPaymentInfo] = useState({});
     const router = useRouter();
 
     const initiatePayment = async (e) => {
@@ -58,7 +57,6 @@ const checkout = (props) => {
                     "image": "https://scontent.fvga2-1.fna.fbcdn.net/v/t39.30808-6/333269272_729527645556981_8288775143650171103_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=efb6e6&_nc_ohc=OMfzubTugDAAX88YZIl&_nc_ht=scontent.fvga2-1.fna&oh=00_AfAbys8Jry1G7eNicpd5AkVK80Esu_daSF-zFOGssNIkbw&oe=65BC80FE",
                     "order_id": paymentInitData.order.id,
                     "handler": async function (response) {
-                        console.log(orderData.order._id, paymentInitData.order.id, response.razorpay_payment_id, paymentInitData.order.amount)
                         const response3 = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/postransaction`, {
                             method: "POST",
                             headers: {
@@ -74,26 +72,16 @@ const checkout = (props) => {
                         const res3jsonData = await response3.json();
                         if (response3.status === 200) {
                             props.clearCart();
-                            setPaymentInfo(response);
-                            setName("");
-                            setEmail("");
-                            setAddress("");
-                            setPhoneno("");
-                            setCity("");
-                            setState("");
-                            setPincode("");
-                            setTimeout(() => {
-                                toast.success("Payment Successful! 🎉", {
-                                    position: "top-center",
-                                    autoClose: 900,
-                                    hideProgressBar: false,
-                                    closeOnClick: true,
-                                    pauseOnHover: true,
-                                    draggable: true,
-                                    progress: undefined,
-                                })
-                                router.push(`/order?orderID=${res3jsonData.order.orderID}`);
-                            }, 500);
+                            router.push(`/order?orderID=${res3jsonData.order.orderID}`);
+                            toast.success("Payment Successful! 🎉", {
+                                position: "top-center",
+                                autoClose: 900,
+                                hideProgressBar: false,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                progress: undefined,
+                            })
                         } else {
                             toast.error(res3jsonData.error, {
                                 position: "top-center",
