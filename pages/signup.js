@@ -22,16 +22,19 @@ const signup = () => {
 			const data = await res.json();
 			toast.success(data.message, {
 				position: "top-center",
-				autoClose: 1500,
+				autoClose: 800,
 				hideProgressBar: false,
 				closeOnClick: true,
 				pauseOnHover: true,
 				draggable: true,
 				progress: undefined,
+				onClose: () => {
+					setName("");
+					setEmail("");
+					setPassword("");
+					router.push("/login");
+				}
 			});
-			setName("");
-			setEmail("");
-			setPassword("");
 		}
 		catch (err) {
 			console.log(err);

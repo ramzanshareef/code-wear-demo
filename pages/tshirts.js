@@ -32,8 +32,8 @@ const tshirts = (props) => {
                                             {
                                                 props.tshirts[product].color.sort().map((color, key) => (
                                                     <span className={`inline-flex items-center justify-center px-2 py-1 mr-1 text-xs leading-none text-white bg-${color.toLowerCase()}-500 rounded-3xl 
-                                                    ${(color.toLowerCase()==="black")?"bg-black":""} 
-                                                    ${(color.toLowerCase()!=="white")?"text-white":"text-black bg-white border"} 
+                                                    ${(color.toLowerCase() === "black") ? "bg-black" : ""} 
+                                                    ${(color.toLowerCase() !== "white") ? "text-white" : "text-black bg-white border"} 
                                                     `} key={key}>{color}</span>
                                                 ))
                                             }
@@ -78,6 +78,10 @@ export async function getServerSideProps() {
             if (item.availableQty > 0) {
                 tshirts[item.title].color = [item.color];
                 tshirts[item.title].size = [item.size];
+            }
+            else {
+                tshirts[item.title].color = [];
+                tshirts[item.title].size = [];
             }
         }
     }

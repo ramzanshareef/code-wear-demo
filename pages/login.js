@@ -22,8 +22,6 @@ const login = () => {
             setEmail("");
             setPassword("");
             if (res.status === 200) {
-                localStorage.setItem("token", data.token);
-                // document.cookie = `token=${data.token}`;
                 toast.success(data.message, {
                     position: "top-center",
                     autoClose: 800,
@@ -32,11 +30,13 @@ const login = () => {
                     pauseOnHover: true,
                     draggable: true,
                     progress: undefined,
+                    onClose: () => {
+                        localStorage.setItem("token", data.token);
+                        router.push("/")
+                    }
                 });
-                setTimeout(() => {
-                    router.push(process.env.NEXT_PUBLIC_HOST)
-                }, 800);
-            } else {
+            }
+            else {
                 toast.error(data.message, {
                     position: "top-center",
                     autoClose: 1500,

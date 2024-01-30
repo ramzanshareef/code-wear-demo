@@ -5,10 +5,10 @@ const OrderSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    orderID:{
+    orderID: {
         type: String,
     },
-    paymentID:{
+    paymentID: {
         type: String,
     },
     products: {
@@ -23,12 +23,15 @@ const OrderSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    status: {
+    payment_status: {
         type: String,
         default: "pending",
     },
-    
-},{
+    payment_info: {
+        type: Object,
+    },
+
+}, {
     timestamps: true,
 });
 

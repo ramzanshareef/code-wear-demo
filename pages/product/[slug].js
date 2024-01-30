@@ -24,7 +24,7 @@ const Slug = (props) => {
             return;
         }
         else {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/pincode`,{
+            const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/pincode`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -57,26 +57,26 @@ const Slug = (props) => {
 
     }
     const addToCart = () => {
-        props.addToCart({
-            itemCode: props.product._id,
-            qty: 1,
-            price: props.product.price,
-            name: props.product.title,
-            size: props.product.size,
-            color: props.product.color,
-            category: props.product.category
-        });
-        setTimeout(() => {
             toast.success("Added to cart successfully", {
                 position: "top-center",
-                autoClose: 800,
+                autoClose: 400,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
+                onClose: () => {
+                    props.addToCart({
+                        itemCode: props.product._id,
+                        qty: 1,
+                        price: props.product.price,
+                        name: props.product.title,
+                        size: props.product.size,
+                        color: props.product.color,
+                        category: props.product.category
+                    });
+                }
             });
-        }, 500);
     }
     const buyNow = () => {
         props.buyNow({

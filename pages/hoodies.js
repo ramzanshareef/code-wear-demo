@@ -32,8 +32,8 @@ const hoodies = (props) => {
                                             {
                                                 props.hoodies[product].color.sort().map((color, key) => (
                                                     <span className={`inline-flex items-center justify-center px-2 py-1 mr-1 text-xs leading-none  bg-${color.toLowerCase()}-500 rounded-3xl 
-                                                    ${(color.toLowerCase()==="black")?"bg-black":""} 
-                                                    ${(color.toLowerCase()!=="white")?"text-white":"text-black bg-white border"}
+                                                    ${(color.toLowerCase() === "black") ? "bg-black" : ""} 
+                                                    ${(color.toLowerCase() !== "white") ? "text-white" : "text-black bg-white border"}
                                                     
                                                     `} key={key}>{color}</span>
                                                 ))
@@ -79,6 +79,10 @@ export async function getServerSideProps() {
             if (item.availableQty > 0) {
                 hoodies[item.title].color = [item.color];
                 hoodies[item.title].size = [item.size];
+            }
+            else {
+                hoodies[item.title].color = [];
+                hoodies[item.title].size = [];
             }
         }
     }

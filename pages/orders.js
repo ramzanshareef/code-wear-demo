@@ -8,7 +8,7 @@ const orders = (props) => {
     const [orders, setOrders] = useState([]);
     useEffect(() => {
         if (!localStorage.getItem("token")) {
-            router.push("/login"    )
+            router.push("/login")
         }
         else {
             let token = localStorage.getItem("token");
@@ -43,9 +43,11 @@ const orders = (props) => {
                                     <thead className="border-b border-b-gray-400 font-medium dark:border-neutral-500">
                                         <tr>
                                             <th scope="col" className="px-6 py-4">Order ID</th>
+                                            <th scope="col" className="px-6 py-4">Date & Time</th>
                                             <th scope="col" className="px-6 py-4">Items</th>
                                             <th scope="col" className="px-6 py-4">Quantity</th>
                                             <th scope="col" className="px-6 py-4">Price</th>
+                                            <th scope="col" className="px-6 py-4">Status</th>
                                             <th scope="col" className="px-6 py-4">Details</th>
                                         </tr>
                                     </thead>
@@ -55,6 +57,11 @@ const orders = (props) => {
                                                 return (
                                                     <tr key={key} className="border-b ">
                                                         <td className="px-6 py-4 whitespace-nowrap">{order.orderID}</td>
+                                                        <td className="px-6 py-4 whitespace-nowrap">
+                                                            {
+                                                                new Date(order.updatedAt).toLocaleString()
+                                                            }
+                                                        </td>
                                                         <td className="px-6 py-4 whitespace-nowrap">
                                                             <ol className="list-decimal">
                                                                 {
@@ -79,18 +86,25 @@ const orders = (props) => {
                                                             </ul>
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap">₹ {order.amount}</td>
+                                                        <td className="px-6 py-4 whitespace-nowrap">{order.payment_status}</td>
                                                         <td className="px-6 py-4 whitespace-nowrap">
-                                                            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                                            <p className="cursor-pointer hover:underline"
                                                             onClick={()=>{
                                                                 router.push("/order?orderID="+order.orderID)
                                                             }}
                                                             >
                                                                 Details
-                                                            </button>
+                                                            </p>
                                                         </td>
                                                     </tr>
                                                 )
                                             })
+                                        }
+                                        {
+                                            orders.length === 0 &&
+                                            <tr>
+                                                <td className="px-6 py-4 whitespace-nowrap text-center" colSpan="6">No Orders</td>
+                                            </tr>
                                         }
                                     </tbody>
                                 </table>

@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const checkout = ({ subTotal, cart, clearCart, removeFromCart, addToCart }) => {
+const checkout = (props) => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [address, setAddress] = useState("");
@@ -51,8 +51,8 @@ const checkout = ({ subTotal, cart, clearCart, removeFromCart, addToCart }) => {
             body: JSON.stringify({
                 email: email,
                 address: address,
-                amount: subTotal,
-                products: cart
+                amount: props.subTotal,
+                products: props.cart
             }),
         });
         const orderData = await response1.json();
@@ -87,25 +87,27 @@ const checkout = ({ subTotal, cart, clearCart, removeFromCart, addToCart }) => {
                                 orderID: paymentInitData.order.id,
                                 paymentID: response.razorpay_payment_id,
                                 amount: paymentInitData.order.amount,
-                                cart: cart,
+                                cart: props.cart,
+                                payment_signature: response.razorpay_signature,
                             }),
                         });
                         const res3jsonData = await response3.json();
                         if (response3.status === 200) {
                             toast.success("Payment Successful! 🎉", {
                                 position: "top-center",
-                                autoClose: 900,
+                                autoClose: 700,
                                 hideProgressBar: false,
                                 closeOnClick: true,
                                 pauseOnHover: true,
                                 draggable: true,
                                 progress: undefined,
                                 onClose: () => {
-                                    clearCart();
+                                    props.clearCart();
                                     router.push(`/order?orderID=${res3jsonData.order.orderID}`);
                                 }
                             })
-                        } else {
+                        }
+                        else {
                             toast.error(res3jsonData.error, {
                                 position: "top-center",
                                 autoClose: 900,
@@ -144,15 +146,48 @@ const checkout = ({ subTotal, cart, clearCart, removeFromCart, addToCart }) => {
                 }
                 var res = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
                 if (!res) {
-                    alert("Razorpay SDK failed to load. Are you online?");
-                    return;
+                    toast.error("Razorpay SDK failed to load. Are you online?", {
+                        position: "top-center",
+                        autoClose: 900,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        onClose: () => {
+                            router.push("/checkout");
+                        }
+                    })
                 }
                 else {
                     var rzp1 = new Razorpay(options);
                     rzp1.open();
                     rzp1.on('payment.failed', function (response) {
-                        alert("Payment Failed");
-                        router.push("/checkout");
+                        rzp1.close();
+                        // error message will be in response.error.description.
+                        toast.error("Payment Failed! 😢 Please Try Again", {
+                            position: "top-center",
+                            autoClose: 3000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            onClose: async () => {
+                                const revokeRes = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/revoketransaction`, {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    },
+                                    body: JSON.stringify({
+                                        orderID: orderData.order._id,
+                                    }),
+                                });
+                                if (revokeRes.status === 200) {
+                                    window.location = "/checkout";
+                                }
+                            }
+                        })
                     });
                 }
             }
@@ -178,7 +213,7 @@ const checkout = ({ subTotal, cart, clearCart, removeFromCart, addToCart }) => {
                 draggable: true,
                 progress: undefined,
                 onClose: () => {
-                    clearCart();
+                    props.clearCart();
                 }
             })
         }
@@ -342,35 +377,35 @@ const checkout = ({ subTotal, cart, clearCart, removeFromCart, addToCart }) => {
                                 <div className="w-[95%] mx-auto">
                                     <ol className="list-decimal my-2">
                                         {
-                                            Object.keys(cart).length === 0 && <p className="text-center">Cart is empty</p>
+                                            Object.keys(props.cart).length === 0 && <p className="text-center">Cart is empty</p>
                                         }
-                                        {cart && Object.keys(cart).map((item, index) => {
+                                        {props.cart && Object.keys(props.cart).map((item, index) => {
                                             return (
                                                 <li className="p-3" key={index}>
                                                     <div className="flex justify-between items-center">
                                                         <div className="w-full flex flex-row">
                                                             <div className="w-2/3 ">
-                                                                {cart[item].name + "(" + cart[item].size + "/" + cart[item].color + ")"}
+                                                                {props.cart[item].name + "(" + props.cart[item].size + "/" + props.cart[item].color + ")"}
                                                             </div>
                                                             <div className="flex items-center justify-center w-1/3 space-x-2">
                                                                 <IoRemoveCircleOutline className="text-lg cursor-pointer"
                                                                     onClick={() => {
-                                                                        removeFromCart({
+                                                                        props.removeFromCart({
                                                                             itemCode: item,
                                                                             qty: 1,
                                                                         })
                                                                     }} />
-                                                                <p className="text-md">{cart[item].qty}</p>
+                                                                <p className="text-md">{props.cart[item].qty}</p>
                                                                 <IoAddCircleOutline className="text-lg cursor-pointer"
                                                                     onClick={() => {
-                                                                        addToCart({
+                                                                        props.addToCart({
                                                                             itemCode: item,
                                                                             qty: 1,
-                                                                            price: cart[item].price,
-                                                                            name: cart[item].name,
-                                                                            size: cart[item].size,
-                                                                            variant: cart[item].variant,
-                                                                            category: cart[item].category
+                                                                            price: props.cart[item].price,
+                                                                            name: props.cart[item].name,
+                                                                            size: props.cart[item].size,
+                                                                            variant: props.cart[item].variant,
+                                                                            category: props.cart[item].category
                                                                         })
                                                                     }} />
                                                             </div>
@@ -381,19 +416,19 @@ const checkout = ({ subTotal, cart, clearCart, removeFromCart, addToCart }) => {
                                         })}
                                     </ol>
                                     <span className="font-bold text-xl">
-                                        Subtotal : ₹‎{subTotal}
+                                        Subtotal : ₹‎{props.subTotal}
                                     </span>
                                 </div>
                             </div>
 
                             <button type="submit" className="text-white bg-blue-500 border-0 p-2 focus:outline-none hover:bg-blue-600 rounded w-fit my-4 disabled:cursor-not-allowed disabled:bg-blue-400"
                                 onClick={initiatePayment}
-                                disabled={paymentDisabled || subTotal === 0}
+                                disabled={paymentDisabled || props.subTotal === 0}
                             >
                                 <div className="flex flex-row items-center justify-center space-x-2">
                                     <BsFillBagCheckFill className="text-xl" />
                                     <p>
-                                        Pay ₹‎{subTotal}
+                                        Pay ₹‎{props.subTotal}
                                     </p>
                                 </div>
                             </button>

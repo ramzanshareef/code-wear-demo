@@ -17,7 +17,7 @@ const order = (props) => {
             router.push("/");
         }
     }, [])
-    
+
 
 
 
@@ -31,13 +31,28 @@ const order = (props) => {
                             <h2 className="text-sm title-font text-gray-500 tracking-widest">
                                 Order ID: {props.order && props.order.orderID}
                             </h2>
-                            <h1 className="text-gray-900 text-lg md:text-3xl title-font font-medium mb-4">
+                            <h1 className={`text-gray-900 text-lg md:text-3xl title-font font-medium mb-4
+                            ${props.order.payment_status === "paid" ? "block" : "hidden"}
+                            `}>
                                 Yayy! Order placed successfully 🎉
                             </h1>
-                            <p className="leading-relaxed mb-4">
-                                Your payment status is <b>{props.order && props.order.status}</b>. <br />
-                                Your order has been placed successfully. You will receive an email with the order details.
-                            </p>
+                            <h1 className={`text-gray-900 text-lg md:text-3xl title-font font-medium mb-4
+                            ${props.order.payment_status === "pending" ? "block" : "hidden"}
+                            `}>
+                                Oops! Payment failed 😔
+                            </h1>
+                            <div className="leading-relaxed mb-4">
+                                Order placed on <b>{props.order && 
+                                new Date(props.order.updatedAt).toLocaleString()
+                                }</b>. <br />
+                                Your payment status is <b>{props.order && props.order.payment_status}</b>. <br />
+                                <p className={` ${props.order.payment_status === "paid" ? "block" : "hidden"} `}>
+                                    Your order has been placed successfully. You will receive an email with the order details.
+                                </p>
+                                <p className={` ${props.order.payment_status === "pending" ? "block" : "hidden"} `}>
+                                    Your order is on hold as your payment is pending. Please try again.
+                                </p>
+                            </div>
                             <div className="my-4">
                                 <div className="flex flex-row  mb-2 border-b-2 p-2">
                                     <span className="font-semibold w-1/3 text-center">Item</span>
@@ -51,7 +66,7 @@ const order = (props) => {
                                                 <div className="flex flex-row border-b p-2" key={index} >
                                                     <span className="w-1/3 text-center">{order.name + " (" + order.size + "/" + order.color + ")"}</span>
                                                     <span className="w-1/3 text-center">{order.qty}</span>
-                                                    <span className="w-1/3 text-center">₹{order.price*order.qty}</span>
+                                                    <span className="w-1/3 text-center">₹{order.price * order.qty}</span>
                                                 </div>
                                             )
                                         })
@@ -61,10 +76,13 @@ const order = (props) => {
                             </div>
                             <div className="flex">
                                 <span className="title-font font-medium text-lg md:text-2xl text-gray-900">
-                                   Amount Paid : ₹{props.order && props.order.amount}
-                                    </span>
-                                <button className="flex ml-auto text-white bg-blue-500 border-0 py-2 px-4 focus:outline-none hover:bg-blue-600 rounded">
+                                    Total : ₹{props.order && props.order.amount}
+                                </span>
+                                <button className={` "flex ml-auto text-white bg-blue-500 border-0  rounded-md py-2 px-4 focus:outline-none hover:bg-blue-600" ${props.order.payment_status === "paid" ? "block" : "hidden"} `}>
                                     Track Order
+                                </button>
+                                <button className={` "flex ml-auto text-white bg-blue-500 border-0  rounded-md py-2 px-4 focus:outline-none hover:bg-blue-600" ${props.order.payment_status === "pending" ? "block" : "hidden"} `}>
+                                    Try Again
                                 </button>
                             </div>
                         </div>
@@ -78,10 +96,10 @@ const order = (props) => {
 
 export async function getServerSideProps(context) {
     const orderID = context.query.orderID;
-    const order = await Order.findOne({orderID: orderID});
+    const order = await Order.findOne({ orderID: orderID });
     return {
         props: {
-            order: JSON.parse(JSON.stringify(order))
+            order: JSON.parse(JSON.stringify(order)),
         }
     }
 }
