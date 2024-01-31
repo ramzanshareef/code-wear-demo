@@ -1,6 +1,7 @@
+import connectDB from "@/middlewares/db";
 import Razorpay from "razorpay";
 
-export default function handler(req, res) {
+const handler = async (req, res) => {
     if (req.method !== "POST") {
         return res.status(405).json({ error: "Method not allowed" });
     }
@@ -26,3 +27,5 @@ export default function handler(req, res) {
         });
     }
 }
+
+export default connectDB(handler);

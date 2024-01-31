@@ -276,7 +276,7 @@ const Slug = (props) => {
 export async function getServerSideProps(context) {
     let error = null;
     if (!mongoose.connections[0].readyState) {
-        await mongoose.connect(process.env.NEXT_PUBLIC_MONGO_URL || "mongodb://127.0.0.1:27017/ecommerce")
+        await mongoose.connect(process.env.NEXT_PUBLIC_MONGO_URL)
     }
     let product = await Product.findOne({ slug: context.query.slug });
     if (product === null) {

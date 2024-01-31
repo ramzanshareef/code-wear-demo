@@ -59,7 +59,7 @@ const Mugs = (props) => {
 
 export async function getServerSideProps() {
     if (!mongoose.connections[0].readyState) {
-        await mongoose.connect("mongodb://127.0.0.1:27017/ecommerce");
+        await mongoose.connect(process.env.NEXT_PUBLIC_MONGO_URL);
     }
     let products = await Product.find({ category: "Mugs" });
     let mugs = {}

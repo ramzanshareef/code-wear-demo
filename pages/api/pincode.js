@@ -1,5 +1,7 @@
+import connectDB from "@/middlewares/db";
 import pinCodes from "../../data/pincodes.json";
-export default function handler(req, res) {
+
+const handler = async (req, res) => {
     const pincodes = pinCodes;
     if (req.method !== "POST") {
         return res.status(405).json({ error: "Method not allowed" });
@@ -16,4 +18,6 @@ export default function handler(req, res) {
             data: pincodes[pincode]
         });
     }
-}  
+}
+
+export default connectDB(handler);

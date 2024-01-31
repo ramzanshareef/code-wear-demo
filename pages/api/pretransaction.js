@@ -51,4 +51,5 @@ const handler = async (req, res) => {
         res.status(500).json({ error: err.messsge });
     }
 }
+
 export default connectDB(handler);

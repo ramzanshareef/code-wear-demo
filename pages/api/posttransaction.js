@@ -1,8 +1,9 @@
+import connectDB from "@/middlewares/db";
 import Order from "@/models/Order";
 import Product from "@/models/Product";
 const crypto = require("crypto");
 
-export default async function handler(req, res) {
+const handler = async (req, res) => {
     try {
         if (req.method !== "POST") {
             return res.status(405).json({ error: "Method not allowed" });
@@ -71,3 +72,5 @@ export default async function handler(req, res) {
         return res.status(500).json({ error: err.messsge });
     }
 }
+
+export default connectDB(handler);

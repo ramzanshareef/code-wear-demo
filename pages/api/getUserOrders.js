@@ -1,9 +1,10 @@
+import connectDB from "@/middlewares/db";
 import Order from "@/models/Order";
 import User from "@/models/User";
 
 const jwt = require("jsonwebtoken");
 
-export default async function handler(req, res) {
+const handler = async (req, res) => {
     try {
         if (req.method !== "POST") {
             return res.status(405).json({ message: "Method not allowed" });
@@ -24,3 +25,5 @@ export default async function handler(req, res) {
         return res.status(500).json({ message: err.message });
     }
 }
+
+export default connectDB(handler);

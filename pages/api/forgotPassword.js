@@ -2,7 +2,6 @@ import connectDB from "@/middlewares/db"
 import Forget from "@/models/Forget";
 
 const handler = async (req, res) => {
-    // check if method is POST
     if (req.method !== "POST") {
         return res.status(400).json({ message: "Method not allowed" });
     }

@@ -119,7 +119,7 @@ const orders = (props) => {
 
 export async function getServerSideProps(context) {
     if (!mongoose.connections[0].readyState) {
-        await mongoose.connect("mongodb://127.0.0.1:27017/ecommerce")
+        await mongoose.connect(process.env.NEXT_PUBLIC_MONGO_URL);
     }
 
 

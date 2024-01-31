@@ -68,7 +68,7 @@ const hoodies = (props) => {
 
 export async function getServerSideProps() {
     if (!mongoose.connections[0].readyState) {
-        await mongoose.connect("mongodb://127.0.0.1:27017/ecommerce");
+        await mongoose.connect();
     }
     let products = await Product.find({ category: "Hoodies" });
     let hoodies = {}
