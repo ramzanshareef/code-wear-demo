@@ -14,6 +14,15 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    address: {
+        type: String,
+    },
+    phoneno: {
+        type: Number,
+    },
+    pincode: {
+        type: Number,
+    },
 },{
     timestamps: true,
 });

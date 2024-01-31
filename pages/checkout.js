@@ -21,39 +21,74 @@ const checkout = (props) => {
     const router = useRouter();
     const pincodeEffectRan = useRef(false);
     const [pincodeError, setPincodeError] = useState(false);
+    const useEffectRan = useRef(false);
 
     useEffect(() => {
-        if (localStorage.getItem("token") === null) {
-            toast.error("Please Login to continue", {
-                position: "top-center",
-                autoClose: 1000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                onClose: () => {
-                    router.push("/login");
-                }
-            })
+        if (useEffectRan.current === true) {
+            return;
         }
-        // if (Object.keys(props.cart).length === 0) {
-        //     router.push("/");
-        // }
-        const fetchUser = async () => {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/getUserOrders`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ token: localStorage.getItem("token") }),
-            });
-            if (res.status === 200) {
-                const data = await res.json();
-                setEmail(data.user.email);
+        else {
+            if (localStorage.getItem("token") === null) {
+                toast.error("Please Login to continue", {
+                    position: "top-center",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    onClose: () => {
+                        router.push("/login");
+                    }
+                })
             }
+            // if (Object.keys(props.cart).length === 0) {
+            //     router.push("/");
+            // }
+            const fetchPincode = async (pincode) => {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/pincode`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        pincode: pincode,
+                    }),
+                });
+                const jsonData = await response.json();
+                if (response.status === 200) {
+                    setCity(jsonData.data.city);
+                    setState(jsonData.data.state);
+                    setPincodeError(false);
+                }
+                else {
+                    setPincodeError(true);
+                    setCity("");
+                    setState("");
+                }
+            }
+            fetchPincode();
+            const fetchUser = async () => {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/getUserOrders`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ token: localStorage.getItem("token") }),
+                });
+                if (res.status === 200) {
+                    const data = await res.json();
+                    setEmail(data.user.email);
+                    setName(data.user.name);
+                    setAddress(data.user.address);
+                    setPhoneno(data.user.phoneno);
+                    setPincode(data.user.pincode);
+                    fetchPincode(data.user.pincode);
+                }
+            }
+            fetchUser();
+            useEffectRan.current = true;
         }
-        fetchUser();
     }, [])
 
     const initiatePayment = async (e) => {
@@ -65,7 +100,7 @@ const checkout = (props) => {
             },
             body: JSON.stringify({
                 email: email,
-                address: address,
+                address: address + ", " + city + ", " + state + ", PinCode = " + pincode,
                 amount: props.subTotal,
                 products: props.cart
             }),
@@ -198,8 +233,19 @@ const checkout = (props) => {
                                         orderID: orderData.order._id,
                                     }),
                                 });
-                                if (revokeRes.status === 200) {
-                                    window.location.reload();
+                                if (revokeRes.status !== 200) {
+                                    toast.error("Error in revoking transaction", {
+                                        position: "top-center",
+                                        autoClose: 900,
+                                        hideProgressBar: false,
+                                        closeOnClick: true,
+                                        pauseOnHover: true,
+                                        draggable: true,
+                                        progress: undefined,
+                                    })
+                                }
+                                else {
+                                    window.location = "/checkout";
                                 }
                             }
                         })
@@ -215,7 +261,7 @@ const checkout = (props) => {
                     pauseOnHover: true,
                     draggable: true,
                     progress: undefined,
-                    onClose: async () =>{
+                    onClose: async () => {
                         const revokeRes = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/revoketransaction`, {
                             method: "POST",
                             headers: {
@@ -288,7 +334,7 @@ const checkout = (props) => {
     }, [pincode])
 
     useEffect(() => {
-        if (name.length > 0 && email.length > 0 && address.length > 0 && phoneno.length === 10 && city.length > 0 && state.length > 0 && pincode.length === 6) {
+        if (name.length > 0 && email.length > 0 && address.length > 0 && phoneno.toString().length === 10 && city.length > 0 && state.length > 0 && pincode.toString().length === 6) {
             setPaymentDisabled(false);
         }
         else {

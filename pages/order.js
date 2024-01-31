@@ -3,8 +3,12 @@ import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Error from "next/error";
 
 const order = (props) => {
+    if (props.error) {
+        return <Error statusCode={404} />
+    }
     const router = useRouter();
     useEffect(() => {
         if (!localStorage.getItem("token")) {
@@ -98,8 +102,16 @@ const order = (props) => {
 }
 
 export async function getServerSideProps(context) {
+    let error = null;
     const orderID = context.query.orderID;
     const order = await Order.findOne({ orderID: orderID });
+    if (!order) {
+        return {
+            props: {
+                error: "Order not found"
+            }
+        }
+    }
     return {
         props: {
             order: JSON.parse(JSON.stringify(order)),
