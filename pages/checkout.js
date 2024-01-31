@@ -61,7 +61,6 @@ const checkout = (props) => {
                     setState("");
                 }
             }
-            fetchPincode();
             const fetchUser = async () => {
                 const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/getUserOrders`, {
                     method: "POST",
@@ -74,10 +73,25 @@ const checkout = (props) => {
                     const data = await res.json();
                     setEmail(data.user.email);
                     setName(data.user.name);
-                    setAddress(data.user.address);
-                    setPhoneno(data.user.phoneno);
-                    setPincode(data.user.pincode);
-                    fetchPincode(data.user.pincode);
+                    if (data.user.address === undefined) {
+                        setAddress("");
+                    } 
+                    else{
+                        setAddress(data.user.address);
+                    }
+                    if (data.user.phoneno === undefined) {
+                        setPhoneno("");
+                    }
+                    else{
+                        setPhoneno(data.user.phoneno);
+                    }
+                    if (data.user.pincode === undefined) {
+                        setPincode("");
+                    }
+                    else{
+                        setPincode(data.user.pincode);
+                        fetchPincode(data.user.pincode);
+                    }
                 }
             }
             fetchUser();
