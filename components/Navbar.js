@@ -19,7 +19,7 @@ const Navbar = (props) => {
         else if (Object.keys(props.cart).length !== 0) {
             props.setShowCartSidebar(true);
         }
-        let exceptedFromCart = ["/checkout", "/profile", "/orders"];
+        let exceptedFromCart = ["/checkout", "/profile", "/orders", "/login", "/signup", "/forgotpassword"];
         if (exceptedFromCart.includes(router.pathname)) {
             props.setShowCartSidebar(false);
         }

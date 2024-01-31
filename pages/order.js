@@ -7,7 +7,7 @@ import Error from "next/error";
 
 const order = (props) => {
     if (props.error) {
-        return <Error statusCode={404} />
+        return <Error statusCode={404} withDarkMode={false} />
     }
     const router = useRouter();
     useEffect(() => {
@@ -26,7 +26,7 @@ const order = (props) => {
 
 
     return (
-        <div>
+        <div className="min-h-screen" >
             <ToastContainer />
             <section className="text-gray-600 body-font overflow-hidden p-4">
                 <div className="container px-5 py-24 mx-auto">
@@ -68,9 +68,9 @@ const order = (props) => {
                                         props.order && Object.values(Object.values(props.order.products)[0]).map((order, index) => {
                                             return (
                                                 <div className="flex flex-row border-b p-2" key={index} >
-                                                    <span className="w-1/3 text-center">{order.name + " (" + order.size + "/" + order.color + ")"}</span>
-                                                    <span className="w-1/3 text-center">{order.qty}</span>
-                                                    <span className="w-1/3 text-center">
+                                                    <span className="w-1/3 text-center my-auto">{order.name + " (" + order.size + "/" + order.color + ")"}</span>
+                                                    <span className="w-1/3 text-center my-auto">{order.qty}</span>
+                                                    <span className="w-1/3 text-center my-auto">
                                                         {order.qty + " X " + order.price + " = "}
                                                         ₹{order.price * order.qty}
                                                     </span>

@@ -7,7 +7,7 @@ const stickers = (props) => {
     let colors = ["bg-red-500", "bg-blue-500", "bg-green-500", "bg-yellow-500", "bg-pink-500", "bg-purple-500", "bg-indigo-500", "bg-gray-500", "bg-black-500", "bg-white-500", "bg-black"];
 
     return (
-        <div className="p-4">
+        <div className="p-4 min-h-screen">
             <section className="text-gray-600 body-font">
                 <div className="container px-5 py-24 w-fit mx-auto">
                     <div className="flex flex-wrap -m-4 justify-center p-6 md:space-x-3">

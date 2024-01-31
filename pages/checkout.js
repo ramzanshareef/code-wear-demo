@@ -24,27 +24,21 @@ const checkout = (props) => {
     const useEffectRan = useRef(false);
 
     useEffect(() => {
-        if (useEffectRan.current === true) {
-            return;
+        if (localStorage.getItem("token") === null) {
+            toast.error("Please Login to continue", {
+                position: "top-center",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                onClose: () => {
+                    router.push("/login");
+                }
+            })
         }
         else {
-            if (localStorage.getItem("token") === null) {
-                toast.error("Please Login to continue", {
-                    position: "top-center",
-                    autoClose: 1000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    onClose: () => {
-                        router.push("/login");
-                    }
-                })
-            }
-            // if (Object.keys(props.cart).length === 0) {
-            //     router.push("/");
-            // }
             const fetchPincode = async (pincode) => {
                 const response = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/pincode`, {
                     method: "POST",
@@ -87,7 +81,6 @@ const checkout = (props) => {
                 }
             }
             fetchUser();
-            useEffectRan.current = true;
         }
     }, [])
 

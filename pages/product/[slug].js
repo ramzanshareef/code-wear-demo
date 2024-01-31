@@ -9,7 +9,7 @@ import Error from "next/error";
 
 const Slug = (props) => {
     if (props.error) {
-        return <Error statusCode={404} />
+        return <Error statusCode={404} withDarkMode={false} />
     }
     let colors = ["bg-red-500", "bg-blue-500", "bg-green-500", "bg-yellow-500", "bg-pink-500", "bg-purple-500", "bg-blue-500", "bg-gray-500", "bg-black-500", "bg-white-500", "bg-black"];
     const router = useRouter();
@@ -132,7 +132,7 @@ const Slug = (props) => {
 
 
     return (
-        <div>
+        <div className="md:min-h-screen">
             <ToastContainer />
             <section className="text-gray-600 body-font overflow-hidden">
                 <div className="container px-5 py-10 mx-auto">
