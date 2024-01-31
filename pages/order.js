@@ -42,8 +42,8 @@ const order = (props) => {
                                 Oops! Payment failed 😔
                             </h1>
                             <div className="leading-relaxed mb-4">
-                                Order placed on <b>{props.order && 
-                                new Date(props.order.updatedAt).toLocaleString()
+                                Order placed on <b>{props.order &&
+                                    new Date(props.order.updatedAt).toLocaleString()
                                 }</b>. <br />
                                 Your payment status is <b>{props.order && props.order.payment_status}</b>. <br />
                                 <p className={` ${props.order.payment_status === "paid" ? "block" : "hidden"} `}>
@@ -66,7 +66,10 @@ const order = (props) => {
                                                 <div className="flex flex-row border-b p-2" key={index} >
                                                     <span className="w-1/3 text-center">{order.name + " (" + order.size + "/" + order.color + ")"}</span>
                                                     <span className="w-1/3 text-center">{order.qty}</span>
-                                                    <span className="w-1/3 text-center">₹{order.price * order.qty}</span>
+                                                    <span className="w-1/3 text-center">
+                                                        {order.qty + " X " + order.price + " = "}
+                                                        ₹{order.price * order.qty}
+                                                    </span>
                                                 </div>
                                             )
                                         })

@@ -12,7 +12,7 @@ export default async function handler(req, res) {
             const { token } = req.body;
             const tokenDecryptes = jwt.verify(token, process.env.NEXT_PUBLIC_JWT_SECRET);
             const user = await User.findOne({ email: tokenDecryptes.userEmail }).select("-password");
-            const orders = await Order.find({ email: user.email })
+            const orders = await Order.find({ email: user.email }).sort({ updatedAt: -1 })
             return res.status(200).json({
                 message: "User found",
                 user: user,

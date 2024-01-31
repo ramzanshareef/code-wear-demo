@@ -10,6 +10,7 @@ export default function App({ Component, pageProps }) {
     const [subTotal, setSubTotal] = useState(0);
     const effectRan = useRef(false);
     const [user, setUser] = useState({ token: null });
+    const [showCartSidebar, setShowCartSidebar] = useState(false);
     const [key, setKey] = useState(0);
     const router = useRouter();
     const [progress, setProgress] = useState(0);
@@ -54,7 +55,6 @@ export default function App({ Component, pageProps }) {
             newCart[itemCode] = { qty, price, name, size, color, category };
         }
         setCart(newCart);
-        setKey(Math.random());
         saveCart(newCart);
     }
     const removeFromCart = ({ itemCode, qty }) => {
@@ -93,8 +93,8 @@ export default function App({ Component, pageProps }) {
             waitingTime={500}
             onLoaderFinished={() => setProgress(0)}
         />
-        <Navbar user={user} setUser={setUser} key={key} setKey={setKey} logout={logout} cart={cart} addToCart={addToCart} buyNow={buyNow} removeFromCart={removeFromCart} clearCart={clearCart} subTotal={subTotal} />
-        <Component cart={cart} addToCart={addToCart} buyNow={buyNow} removeFromCart={removeFromCart} clearCart={clearCart} subTotal={subTotal} user={user} setUser={setUser} {...pageProps} />
+        <Navbar user={user} setUser={setUser} key={key} setKey={setKey} logout={logout} cart={cart} addToCart={addToCart} buyNow={buyNow} removeFromCart={removeFromCart} clearCart={clearCart} showCartSidebar={showCartSidebar} setShowCartSidebar={setShowCartSidebar} subTotal={subTotal} />
+        <Component cart={cart} showCartSidebar={showCartSidebar} setShowCartSidebar={setShowCartSidebar} addToCart={addToCart} buyNow={buyNow} removeFromCart={removeFromCart} clearCart={clearCart} subTotal={subTotal} user={user} setUser={setUser} {...pageProps} />
         <Footer />
     </>
 }

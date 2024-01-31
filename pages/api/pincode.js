@@ -1,9 +1,6 @@
+import pinCodes from "../../data/pincodes.json";
 export default function handler(req, res) {
-    const pincodes = {
-        500016: { city: "Hyderabad", state: "Telangana" },
-        500017: { city: "Secunderabad", state: "Telangana" },
-        500018: { city: "Kukatpally", state: "Telangana" },
-    }
+    const pincodes = pinCodes;
     if (req.method !== "POST") {
         return res.status(405).json({ error: "Method not allowed" });
     }

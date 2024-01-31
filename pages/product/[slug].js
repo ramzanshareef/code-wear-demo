@@ -9,7 +9,7 @@ import Error from "next/error";
 
 const Slug = (props) => {
     if (props.error) {
-        return <Error  statusCode={404} />
+        return <Error statusCode={404} />
     }
     let colors = ["bg-red-500", "bg-blue-500", "bg-green-500", "bg-yellow-500", "bg-pink-500", "bg-purple-500", "bg-blue-500", "bg-gray-500", "bg-black-500", "bg-white-500", "bg-black"];
     const router = useRouter();
@@ -59,27 +59,18 @@ const Slug = (props) => {
         }
 
     }
-    const addToCart = () => {
-        toast.success("Added to cart successfully", {
-            position: "top-center",
-            autoClose: 400,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            onClose: () => {
-                props.addToCart({
-                    itemCode: props.product._id,
-                    qty: 1,
-                    price: props.product.price,
-                    name: props.product.title,
-                    size: props.product.size,
-                    color: props.product.color,
-                    category: props.product.category
-                });
-            }
+    const addToCart = (e) => {
+        e.preventDefault();
+        props.addToCart({
+            itemCode: props.product._id,
+            qty: 1,
+            price: props.product.price,
+            name: props.product.title,
+            size: props.product.size,
+            color: props.product.color,
+            category: props.product.category
         });
+        props.setShowCartSidebar(true);
     }
     const buyNow = () => {
         props.buyNow({
@@ -124,8 +115,6 @@ const Slug = (props) => {
                     localStorage.setItem("effectRan", "true");
                 }
                 else {
-                    console.log("color was not available")
-                    console.log("Size, Color = ", size, color)
                     // let url = `http://${proces.env.HOST}/product/${props.colorSizeSlug[color][Object.keys(props.colorSizeSlug[color])[0]].slug}`;
                     // window.location = url;
                     let routerURL = `/product/${props.colorSizeSlug[color][Object.keys(props.colorSizeSlug[color])[0]].slug}`

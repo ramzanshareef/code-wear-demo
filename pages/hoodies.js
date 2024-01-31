@@ -27,7 +27,15 @@ const hoodies = (props) => {
                                     <div className="mt-4 text-center md:text-left">
                                         <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">{props.hoodies[product].category}</h3>
                                         <h2 className="text-gray-900 title-font text-lg font-medium">{props.hoodies[product].title}</h2>
-                                        <p className="mt-1">₹{props.hoodies[product].price}</p>
+                                        <p className="mt-1">₹{props.hoodies[product].price}
+                                        {/* {
+                                            props.hoodies[product].availableQty<=0 
+                                            && 
+                                            <span className="text-red-500 text-sm">
+                                                &nbsp;(Few items are out of stock)
+                                            </span>
+                                        } */}
+                                        </p>
                                         <p className="mt-1">
                                             {
                                                 props.hoodies[product].color.sort().map((color, key) => (

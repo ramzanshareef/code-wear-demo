@@ -7,6 +7,7 @@ import Script from "next/script";
 import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import order from "./order";
 
 const checkout = (props) => {
     const [name, setName] = useState("");
@@ -23,8 +24,22 @@ const checkout = (props) => {
 
     useEffect(() => {
         if (localStorage.getItem("token") === null) {
-            router.push("/login");
+            toast.error("Please Login to continue", {
+                position: "top-center",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                onClose: () => {
+                    router.push("/login");
+                }
+            })
         }
+        // if (Object.keys(props.cart).length === 0) {
+        //     router.push("/");
+        // }
         const fetchUser = async () => {
             const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/getUserOrders`, {
                 method: "POST",
@@ -184,7 +199,7 @@ const checkout = (props) => {
                                     }),
                                 });
                                 if (revokeRes.status === 200) {
-                                    window.location = "/checkout";
+                                    window.location.reload();
                                 }
                             }
                         })
@@ -200,6 +215,20 @@ const checkout = (props) => {
                     pauseOnHover: true,
                     draggable: true,
                     progress: undefined,
+                    onClose: async () =>{
+                        const revokeRes = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/revoketransaction`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                                orderID: orderData.order._id,
+                            }),
+                        });
+                        if (revokeRes.status === 200) {
+                            window.location = "/checkout";
+                        }
+                    }
                 })
             }
         }

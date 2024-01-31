@@ -12,21 +12,20 @@ import 'react-toastify/dist/ReactToastify.css';
 const Navbar = (props) => {
     const router = useRouter();
     const cartRef = useRef();
-    const [showSidebar, setShowSidebar] = useState(false);
     useEffect(() => {
         if (Object.keys(props.cart).length === 0) {
-            setShowSidebar(false);
+            props.setShowCartSidebar(false);
         }
         else if (Object.keys(props.cart).length !== 0) {
-            setShowSidebar(true);
+            props.setShowCartSidebar(true);
         }
         let exceptedFromCart = ["/checkout", "/profile", "/orders"];
         if (exceptedFromCart.includes(router.pathname)) {
-            setShowSidebar(false);
+            props.setShowCartSidebar(false);
         }
     }, [])
     const toggleCartView = () => {
-        setShowSidebar(!showSidebar);
+        props.setShowCartSidebar(!props.showCartSidebar);
     }
     const toggleAccountDropdown = () => {
         if (document.querySelector(".account-dropdown").classList.contains("hidden")) {
@@ -90,7 +89,7 @@ const Navbar = (props) => {
                     </ul>
                 </div>
             </div>
-            <div ref={cartRef} className={`min-h-screen z-20 max-md:w-[18rem] w-[19rem] overflow-y-auto max-md:text-sm cart-sidebar fixed top-0 bg-blue-200 p-8 transition-all ${showSidebar === true ? "right-0" : "-right-96"}`}>
+            <div ref={cartRef} className={`min-h-screen z-20 max-md:w-[18rem] w-[19rem] overflow-y-auto max-md:text-sm cart-sidebar fixed top-0 bg-blue-200 p-8 transition-all ${props.showCartSidebar === true ? "right-0" : "-right-96"}`}>
                 <h2 className="text-2xl font-bold text-center">Cart Details</h2>
                 <p className="absolute top-4 right-2" onClick={toggleCartView}>
                     <IoMdCloseCircle className="text-lg cursor-pointer text-blue-500" />
