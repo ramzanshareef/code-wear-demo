@@ -1,12 +1,10 @@
-# Code Wear
+# 📢 Code Wear
 
 **Code Wear** is a modern e-commerce web application built with **_Next.js_**. It provides a seamless shopping experience, leveraging powerful technologies to ensure efficiency and scalability. The application uses _**Next.js**_ for server-side rendering, React for a smooth and interactive UI, and MongoDB for efficient data management.
 
-## Project Description
-
 Code Wear allows users to browse, purchase, and manage clothing items. With a secure authentication system, users can register, log in, and manage their accounts. The application also integrates with **_Razorpay_** for secure payment processing.
 
-## Features
+## 🚀 Features
 
 - User authentication with **JWT**
 - Secure password hashing with **bcryptjs**
@@ -17,7 +15,7 @@ Code Wear allows users to browse, purchase, and manage clothing items. With a se
 - Smooth loading experience with **next-top-loading-bar**
 - Responsive design with **Tailwind CSS**
 
-## Technologies Used
+## 🛠️ Technologies Used
 
 - **Next.js**: Framework for server-side rendering and static site generation
 - **React**: Frontend library for building interactive user interfaces
@@ -30,7 +28,7 @@ Code Wear allows users to browse, purchase, and manage clothing items. With a se
 - **react-toastify**: Library for notifications
 - **react-top-loading-bar**: Library for loading indicators
 
-## Installation
+## ⬇️ Installation
 
 To set up the project locally, follow these steps:
 
@@ -42,7 +40,7 @@ Ensure Node.js is installed on your system.
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/ramzanshareef/code-wear-demo
+    git clone https://github.com/ramzanshareef/code-wear-demo.git
     cd code-wear-demo
     ```
 
@@ -75,24 +73,24 @@ npm run build
 npm start
 ```
 
-## Usage
+## 📝 Usage
 1. Log In / Sign Up: Create an account or log in to your existing account.
 2. Browse Products: View the list of available clothing items.
 3. Add to Cart: Select items and add them to your shopping cart.
 4. Checkout: Proceed to checkout and complete the payment process using Razorpay.
 5. Manage Orders: View your order history and manage your account settings.
 
-## Contributing
+## 🤝 Contributing
 
 Contributions are welcome! Please follow these steps to contribute:
 
 1. Fork the repository
-2. Create a new branch (git checkout -b feature/YourFeature)
-3. Commit your changes (git commit -m 'Add some feature')
-4. Push to the branch (git push origin feature/YourFeature)
+2. Create a new branch (`git checkout -b feature/YourFeature`)
+3. Commit your changes (`git commit -m 'Add some feature'`)
+4. Push to the branch (`git push origin feature/YourFeature`)
 5. Open a pull request
 
-## Contact
+## 👉 Contact
 
 For any inquiries or feedback, please reach out to:
 - **Name**: Mohd Ramzan Shareef
